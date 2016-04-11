@@ -1,6 +1,7 @@
 package project.view;
 
 import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.GraphicsEnvironment;
 import java.awt.KeyEventDispatcher;
@@ -8,7 +9,10 @@ import java.awt.KeyboardFocusManager;
 import java.awt.Point;
 import java.awt.event.KeyEvent;
 
+import javax.swing.Box;
+import javax.swing.BoxLayout;
 import javax.swing.JFrame;
+import javax.swing.JPanel;
 
 import project.controller.SpaceController;
 
@@ -18,10 +22,10 @@ public class SpaceView extends JFrame
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-
+	
 	private static SpaceView gui = null;
-	private SpaceController controller = null;
-	private SpacePanel gamePanel = null;
+	private static SpaceController controller = null;
+	private static SpacePanel gamePanel = null;
 	
 	private SpaceView ( )
 	{
@@ -56,18 +60,8 @@ public class SpaceView extends JFrame
 		frame.setResizable ( false );
 	}
 	
-	private static void initiateGui ( )
+	private static void addKeyListener ( )
 	{
-		gui = getInstanceOf ( );
-		
-		gui.setLayout ( new BorderLayout ( ) );
-		gui.setSize ( 1200, 800 );
-		gui.setTitle ( "Space Invaders" );
-		gui.setDefaultCloseOperation ( EXIT_ON_CLOSE );
-		gui.setAutoRequestFocus ( false );
-		
-		centerFrameAndMakeItVisible ( gui );
-		
 		KeyEventDispatcher keyEventDispatcher = new KeyEventDispatcher ( )
 		{
 			@Override
@@ -113,12 +107,64 @@ public class SpaceView extends JFrame
 		KeyboardFocusManager.getCurrentKeyboardFocusManager ( ).addKeyEventDispatcher ( keyEventDispatcher );
 	}
 	
+	private static void addGameEnvironment ( )
+	{
+		JPanel borderPanel = new JPanel ( new BorderLayout ( ) );
+		JPanel userInterface = new JPanel ( );
+		Dimension expectedDimension = new Dimension ( gui.getWidth ( ) - 100, gui.getHeight ( ) - 100 );
+		gamePanel = new SpacePanel ( );
+		
+		borderPanel.setPreferredSize ( expectedDimension );
+		borderPanel.setMaximumSize ( expectedDimension );
+		borderPanel.setMinimumSize ( expectedDimension );
+		
+		borderPanel.setBackground ( Color.RED );
+		
+		Box box = new Box ( BoxLayout.Y_AXIS );
+		
+		box.add ( Box.createVerticalGlue ( ) );
+		box.add ( borderPanel );
+		box.add ( Box.createVerticalGlue ( ) );
+		box.setBackground ( Color.GRAY );
+		box.setOpaque ( true );
+		
+		userInterface.setBackground ( Color.BLACK );
+		userInterface.setPreferredSize ( new Dimension ( borderPanel.getWidth ( ), 100 ) );
+		
+		gamePanel.setBackground ( Color.DARK_GRAY );
+		
+		borderPanel.add ( gamePanel, BorderLayout.CENTER );
+		borderPanel.add ( userInterface, BorderLayout.NORTH );
+		
+		gui.add ( box, BorderLayout.CENTER );
+	}
+	
+	private static void initiateGui ( )
+	{
+		gui = getInstanceOf ( );
+		
+		gui.setLayout ( new BorderLayout ( ) );
+		gui.setSize ( 1200, 800 );
+		gui.setTitle ( "Space Invaders" );
+		gui.setDefaultCloseOperation ( EXIT_ON_CLOSE );
+		gui.setAutoRequestFocus ( false );
+		gui.setResizable ( false );
+		
+		addGameEnvironment ( );
+		
+		centerFrameAndMakeItVisible ( gui );
+		addKeyListener ( );
+		
+		gui.validate ( );
+		gui.repaint ( );
+	}
+	
 	public static void main ( String[] args )
 	{
 		initiateGui ( );
 	}
-
-	public SpacePanel getGamePanel ( )
+	
+	public static SpacePanel getGamePanel ( )
 	{
 		return gamePanel;
 	}

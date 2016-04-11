@@ -1,7 +1,5 @@
 package project.model;
 
-import project.controller.SpaceController;
-
 public class Player extends Entity
 {
 	private String playerName;
@@ -10,6 +8,7 @@ public class Player extends Entity
 	public Player ( String name )
 	{
 		playerName = name;
+		this.setPosition ( new Position ( 0, 400 ) );
 	}
 	
 	@Override
@@ -40,7 +39,7 @@ public class Player extends Entity
 		else
 		{
 			int newX = getX ( ) + getSpeed ( );
-			int panelWidth = SpaceController.getGui ( ).getGamePanel ( ).getWidth ( );
+			int panelWidth = getGamePanel ( ).getWidth ( );
 			if ( newX > panelWidth )
 			{
 				newX = panelWidth;

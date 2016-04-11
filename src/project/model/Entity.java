@@ -1,7 +1,11 @@
 package project.model;
 
+import project.controller.SpaceController;
+import project.view.SpacePanel;
+
 public abstract class Entity
 {
+	private final SpacePanel gamePanel = SpaceController.getInstanceOf ( ).getGamePanel ( );
 	private Position position;
 	private int speed;
 	
@@ -45,5 +49,10 @@ public abstract class Entity
 	public void setSpeed ( int speed )
 	{
 		this.speed = speed;
+	}
+
+	public SpacePanel getGamePanel ( )
+	{
+		return gamePanel;
 	}
 }

@@ -1,7 +1,11 @@
 package project.controller;
 
+import java.util.ArrayList;
+
 import project.listeners.TimeListener;
+import project.model.Enemy;
 import project.model.Player;
+import project.view.SpacePanel;
 import project.view.SpaceView;
 
 public class SpaceController implements TimeListener
@@ -9,6 +13,7 @@ public class SpaceController implements TimeListener
 	private static SpaceController controller = null;
 	
 	private Player player;
+	private ArrayList<Enemy> enemies = new ArrayList<Enemy> ( );
 	
 	private SpaceController ( )
 	{
@@ -31,6 +36,11 @@ public class SpaceController implements TimeListener
 	public void timeTick ( )
 	{
 	
+	}
+	
+	public SpacePanel getGamePanel ( )
+	{
+		return SpaceView.getGamePanel ( );
 	}
 	
 	public static SpaceView getGui ( )
