@@ -14,8 +14,8 @@ public class Player extends Entity
 	
 	public Player ( String name )
 	{
+		super ( new Position ( 0, 400 ) );
 		playerName = name;
-		this.setPosition ( new Position ( 0, 400 ) );
 		this.setSize ( DEFAULTSIZE );
 	}
 	

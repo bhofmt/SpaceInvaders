@@ -13,7 +13,7 @@ public class SpaceController implements TimeListener
 {
 	private static SpaceController controller = null;
 	
-	private Player player;
+	private Player player = new Player ( );
 	private ArrayList<Enemy> enemies = new ArrayList<Enemy> ( );
 	private ArrayList<Projectile> projectiles = new ArrayList<Projectile> ( );
 	
@@ -38,21 +38,41 @@ public class SpaceController implements TimeListener
 	private void moveActions ( )
 	{
 		player.move ( );
-		
+		for ( Enemy enemy : enemies )
+		{
+			enemy.move ( );
+		}
+		for ( Projectile projectile : projectiles )
+		{
+			projectile.move ( );
+		}
 	}
 	
 	private void checkActions ( )
 	{
-		
+		for ( Projectile projectile : projectiles )
+		{
+			if ( projectile.getY ( ) <= 0 )
+			{
+				projectiles.remove ( projectile );
+			}
+		}
+	}
+	
+	private void updateActions ( )
+	{
+		SpaceView.getInstanceOf ( ).validate ( );
+		SpaceView.getInstanceOf ( ).repaint ( );
 	}
 	
 	public void timeTick ( )
 	{
 		moveActions ( );
 		checkActions ( );
+		updateActions ( );
 	}
 	
-	public SpacePanel getGamePanel ( )
+	public static SpacePanel getGamePanel ( )
 	{
 		return SpaceView.getGamePanel ( );
 	}

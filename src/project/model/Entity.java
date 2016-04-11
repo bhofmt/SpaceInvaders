@@ -5,7 +5,7 @@ import project.view.SpacePanel;
 
 public abstract class Entity
 {
-	private final SpacePanel gamePanel = SpaceController.getInstanceOf ( ).getGamePanel ( );
+	private final SpacePanel gamePanel = SpaceController.getGamePanel ( );
 	private Position position = new Position ( );
 	private int speed;
 	private int size;
@@ -14,7 +14,7 @@ public abstract class Entity
 	
 	public Entity ( )
 	{
-		
+		this ( new Position ( 0, 0 ) );
 	}
 	
 	public Entity ( Position position )

@@ -15,6 +15,7 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 
 import project.controller.SpaceController;
+import project.thread.Time;
 
 public class SpaceView extends JFrame
 {
@@ -24,7 +25,7 @@ public class SpaceView extends JFrame
 	private static final long serialVersionUID = 1L;
 	
 	private static SpaceView gui = null;
-	private static SpaceController controller = null;
+	private static SpaceController controller = SpaceController.getInstanceOf ( );
 	private static SpacePanel gamePanel = null;
 	
 	private SpaceView ( )
@@ -162,6 +163,11 @@ public class SpaceView extends JFrame
 	public static void main ( String[] args )
 	{
 		initiateGui ( );
+		
+		Time timemaker = new Time ( );
+		
+		timemaker.addListener ( controller );
+		timemaker.start ( );
 	}
 	
 	public static SpacePanel getGamePanel ( )

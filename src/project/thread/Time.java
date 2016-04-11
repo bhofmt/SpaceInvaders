@@ -46,9 +46,16 @@ public class Time extends Thread
 				
 			}
 			
-			for ( TimeListener listener : listeners )
+			if ( listeners.isEmpty ( ) )
 			{
-				listener.timeTick ( );
+				System.out.println ( "ERROR" );
+			}
+			else
+			{
+				for ( TimeListener listener : listeners )
+				{
+					listener.timeTick ( );
+				}
 			}
 		}
 	}

@@ -2,5 +2,5 @@ package project.listeners;
 
 public interface TimeListener
 {
-	void timeTick ( );
+	public void timeTick ( );
 }
