@@ -2,33 +2,16 @@ package project.model;
 
 public class Projectile extends Entity
 {
-	private Player player;
-
-	public Projectile ( Player player )
-	{
-		this.setPlayer ( player );
-		setPosition ( new Position ( player.getPosition ().getX (), player.getPosition ().getY () ) );
-	}
-
+	
 	@Override
-	void move()
+	public void move ( )
 	{
-		int newYCorrd = getPosition ().getY () - getSpeed ();
-		if ( newYCorrd < 0 )
+		int newYCoord = getY ( ) - getSpeed ( );
+		if ( newYCoord < 0 )
 		{
-			newYCorrd = 0;
+			newYCoord = 0;
 		}
-		setY ( newYCorrd );
+		setY ( newYCoord );
 	}
-
-	public Player getPlayer()
-	{
-		return player;
-	}
-
-	public void setPlayer(Player player)
-	{
-		this.player = player;
-	}
-
+	
 }

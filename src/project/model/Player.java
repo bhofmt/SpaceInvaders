@@ -2,17 +2,25 @@ package project.model;
 
 public class Player extends Entity
 {
+	private static final int DEFAULTSIZE = 10;
+	
 	private String playerName;
 	private boolean moveLeft = false, moveRight = false;
+	
+	public Player ( )
+	{
+		this ( "Player" );
+	}
 	
 	public Player ( String name )
 	{
 		playerName = name;
 		this.setPosition ( new Position ( 0, 400 ) );
+		this.setSize ( DEFAULTSIZE );
 	}
 	
 	@Override
-	void move ( )
+	public void move ( )
 	{
 		
 		// Doesn't move the Player at all.

@@ -11,7 +11,7 @@ public class Enemy extends Entity
 	private int movement = getSpeed ( );
 	
 	@Override
-	void move ( )
+	public void move ( )
 	{
 		int newX = movement + getX ( );
 		

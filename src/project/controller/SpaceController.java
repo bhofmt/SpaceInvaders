@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import project.listeners.TimeListener;
 import project.model.Enemy;
 import project.model.Player;
+import project.model.Projectile;
 import project.view.SpacePanel;
 import project.view.SpaceView;
 
@@ -14,6 +15,7 @@ public class SpaceController implements TimeListener
 	
 	private Player player;
 	private ArrayList<Enemy> enemies = new ArrayList<Enemy> ( );
+	private ArrayList<Projectile> projectiles = new ArrayList<Projectile> ( );
 	
 	private SpaceController ( )
 	{
@@ -33,9 +35,21 @@ public class SpaceController implements TimeListener
 		}
 	}
 	
+	private void moveActions ( )
+	{
+		player.move ( );
+		
+	}
+	
+	private void checkActions ( )
+	{
+		
+	}
+	
 	public void timeTick ( )
 	{
-	
+		moveActions ( );
+		checkActions ( );
 	}
 	
 	public SpacePanel getGamePanel ( )
