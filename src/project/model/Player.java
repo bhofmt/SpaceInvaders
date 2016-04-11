@@ -1,5 +1,7 @@
 package project.model;
 
+import project.controller.SpaceController;
+
 public class Player extends Entity
 {
 	private String playerName;
@@ -25,14 +27,25 @@ public class Player extends Entity
 		
 		else if ( moveLeft )
 		{
-			// TODO move left
+			int newX = getX ( ) - getSpeed ( );
+			if ( newX < 0 )
+			{
+				newX = 0;
+			}
+			setX ( newX );
 		}
 		
 		// Moves the Player left.
 		
 		else
 		{
-			// TODO move right
+			int newX = getX ( ) + getSpeed ( );
+			int panelWidth = SpaceController.getGui ( ).getGamePanel ( ).getWidth ( );
+			if ( newX > panelWidth )
+			{
+				newX = panelWidth;
+			}
+			setX ( newX );
 		}
 	}
 	

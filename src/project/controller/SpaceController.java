@@ -2,6 +2,7 @@ package project.controller;
 
 import project.listeners.TimeListener;
 import project.model.Player;
+import project.view.SpaceView;
 
 public class SpaceController implements TimeListener
 {
@@ -30,6 +31,11 @@ public class SpaceController implements TimeListener
 	public void timeTick ( )
 	{
 	
+	}
+	
+	public static SpaceView getGui ( )
+	{
+		return SpaceView.getInstanceOf ( );
 	}
 	
 	public Player getPlayer ( )

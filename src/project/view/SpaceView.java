@@ -14,9 +14,14 @@ import project.controller.SpaceController;
 
 public class SpaceView extends JFrame
 {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
 	private static SpaceView gui = null;
-	
-	protected static SpaceController CONTROLLER = null;
+	private SpaceController controller = null;
+	private SpacePanel gamePanel = null;
 	
 	private SpaceView ( )
 	{
@@ -111,6 +116,11 @@ public class SpaceView extends JFrame
 	public static void main ( String[] args )
 	{
 		initiateGui ( );
+	}
+
+	public SpacePanel getGamePanel ( )
+	{
+		return gamePanel;
 	}
 	
 }
