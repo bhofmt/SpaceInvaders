@@ -19,7 +19,7 @@ public class SpaceController implements TimeListener
 	
 	private SpaceController ( )
 	{
-	
+		
 	}
 	
 	public static SpaceController getInstanceOf ( )
@@ -100,5 +100,15 @@ public class SpaceController implements TimeListener
 	public void movePlayerRight ( boolean b )
 	{
 		player.movesRight ( b );
+	}
+	
+	public ArrayList<Enemy> getEnemies()
+	{
+		return enemies;
+	}
+
+	public ArrayList<Projectile> getProjectiles()
+	{
+		return projectiles;
 	}
 }
