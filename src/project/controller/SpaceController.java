@@ -26,7 +26,7 @@ public class SpaceController implements TimeListener
 	
 	private SpaceController ( )
 	{
-	
+		
 	}
 	
 	public static SpaceController getInstanceOf ( )

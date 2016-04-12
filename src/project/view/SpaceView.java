@@ -10,6 +10,7 @@ import java.awt.event.KeyListener;
 
 import javax.swing.Box;
 import javax.swing.BoxLayout;
+import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -114,8 +115,17 @@ public class SpaceView extends JFrame
 		gamePanel.addKeyListener ( keyListener );
 	}
 	
+	private static void addMainMenu ( )
+	{
+		gui.add ( new JButton ( "Peschä" ) );
+		
+		gui.validate ();
+		gui.repaint ();
+	}
+	
 	private static void addGameEnvironment ( )
 	{
+		
 		controller = SpaceController.getInstanceOf ( );
 		
 		JPanel borderPanel = new JPanel ( new BorderLayout ( ) );
@@ -152,6 +162,16 @@ public class SpaceView extends JFrame
 		borderPanel.add ( userInterface, BorderLayout.NORTH );
 		
 		gui.add ( box, BorderLayout.CENTER );
+
+		Time timemaker = new Time ( );
+		controller.setTimer ( timemaker );
+		
+		timemaker.addListener ( controller );
+		timemaker.start ( );
+		
+		controller.setPlayer ( new Player ( 0, SpaceController.getGamePanel ( ).getHeight ( ) - 50 ) );
+
+		addKeyListener ( );
 	}
 	
 	private static void initiateGui ( )
@@ -165,10 +185,7 @@ public class SpaceView extends JFrame
 		gui.setAutoRequestFocus ( false );
 		gui.setResizable ( false );
 		
-		addGameEnvironment ( );
-		
 		centerFrameAndMakeItVisible ( gui );
-		addKeyListener ( );
 		
 		gui.validate ( );
 		gui.repaint ( );
@@ -187,14 +204,7 @@ public class SpaceView extends JFrame
 	public static void main ( String[] args )
 	{
 		initiateGui ( );
-		
-		controller.setPlayer ( new Player ( 0, gamePanel.getHeight ( ) - 50 ) );
-		
-		Time timemaker = new Time ( );
-		controller.setTimer ( timemaker );
-		
-		timemaker.addListener ( controller );
-		timemaker.start ( );
+		addMainMenu ( );
 	}
 	
 	public static SpacePanel getGamePanel ( )
