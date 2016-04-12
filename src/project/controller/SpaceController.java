@@ -13,7 +13,7 @@ public class SpaceController implements TimeListener
 {
 	private static SpaceController controller = null;
 	
-	private Player player = new Player ( );
+	private Player player = null;
 	private ArrayList<Enemy> enemies = new ArrayList<Enemy> ( );
 	private ArrayList<Projectile> projectiles = new ArrayList<Projectile> ( );
 	
@@ -70,6 +70,16 @@ public class SpaceController implements TimeListener
 		moveActions ( );
 		checkActions ( );
 		updateActions ( );
+	}
+	
+	public void makePlayerShoot ( )
+	{
+		player.shoot ( );
+	}
+	
+	public void addEnemy ( Enemy enemy )
+	{
+		enemies.add ( enemy );
 	}
 	
 	public static SpacePanel getGamePanel ( )

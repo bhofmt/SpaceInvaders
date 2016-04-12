@@ -2,8 +2,14 @@ package project.model;
 
 public class Enemy extends Entity
 {
+	private static final long serialVersionUID = 5919647216294900080L;
+
+	public Enemy ( int x, int y )
+	{
+		super ( x, y );
+	}
+
 	private static final int ROWHEIGHT = 20;
-	private static final int DEFAULTSIZE = 8;
 	
 	/**
 	 * Used to move the enemy around.
@@ -11,36 +17,25 @@ public class Enemy extends Entity
 	
 	private int movement = getSpeed ( );
 	
-	public Enemy ( )
-	{
-		this ( new Position ( 0, 0 ) );
-	}
-	
-	public Enemy ( Position position )
-	{
-		super ( position );
-		setSize ( DEFAULTSIZE );
-	}
-	
 	@Override
 	public void move ( )
 	{
-		int newX = movement + getX ( );
+		int newX = movement + x;
 		
 		if ( newX > getGamePanel ( ).getWidth ( ) )
 		{
 			newX = getGamePanel ( ).getWidth ( );
-			setY ( getY ( ) + ROWHEIGHT );
+			y += ROWHEIGHT;
 			movement = -movement;
 		}
 		else if ( newX < 0 )
 		{
 			newX = 0;
-			setY ( getY ( ) + ROWHEIGHT );
+			y = (int)getY ( ) + ROWHEIGHT;
 			movement = -movement;
 		}
 		
-		setX ( newX );
+		x = newX;
 	}
 	
 }

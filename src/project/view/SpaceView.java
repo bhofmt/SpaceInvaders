@@ -15,6 +15,8 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 
 import project.controller.SpaceController;
+import project.model.Enemy;
+import project.model.Player;
 import project.thread.Time;
 
 public class SpaceView extends JFrame
@@ -72,7 +74,8 @@ public class SpaceView extends JFrame
 				
 				if ( ke.getKeyCode ( ) == KeyEvent.KEY_PRESSED )
 				{
-					switch ( ke.getKeyChar ( ) )
+					System.out.println ( "Pressed" );
+					switch ( ke.getModifiers ( ) )
 					{
 					case KeyEvent.VK_LEFT:
 					case KeyEvent.VK_A:
@@ -82,11 +85,15 @@ public class SpaceView extends JFrame
 					case KeyEvent.VK_D:
 						ctrl.movePlayerRight ( true );
 						break;
+					case KeyEvent.VK_SPACE:
+						ctrl.makePlayerShoot ();
+						break;
 					}
 					return true;
 				}
-				else if ( ke.getKeyCode ( ) == KeyEvent.KEY_RELEASED )
+				else if ( ke.getModifiers ( ) == KeyEvent.KEY_RELEASED )
 				{
+					System.out.println ( "Released" );
 					switch ( ke.getKeyChar ( ) )
 					{
 					case KeyEvent.VK_LEFT:
@@ -163,6 +170,9 @@ public class SpaceView extends JFrame
 	public static void main ( String[] args )
 	{
 		initiateGui ( );
+		
+		controller.setPlayer ( new Player ( ) );
+		controller.addEnemy ( new Enemy ( 15, 549 ) );
 		
 		Time timemaker = new Time ( );
 		

@@ -2,7 +2,10 @@ package project.model;
 
 public class Player extends Entity
 {
-	private static final int DEFAULTSIZE = 10;
+	private static final long serialVersionUID = -3223492405755701782L;
+	
+	private static final int DEFAULTHEIGHT = 10;
+	private static final int DEFAULTWIDTH = 10;
 	
 	private String playerName;
 	private boolean moveLeft = false, moveRight = false;
@@ -14,9 +17,10 @@ public class Player extends Entity
 	
 	public Player ( String name )
 	{
-		super ( new Position ( 0, 400 ) );
+		super ( 0, 400 );
 		playerName = name;
-		this.setSize ( DEFAULTSIZE );
+		height = DEFAULTHEIGHT;
+		width = DEFAULTWIDTH;
 	}
 	
 	@Override
@@ -34,25 +38,25 @@ public class Player extends Entity
 		
 		else if ( moveLeft )
 		{
-			int newX = getX ( ) - getSpeed ( );
+			int newX = (int) ( getX ( ) - getSpeed ( ) );
 			if ( newX < 0 )
 			{
 				newX = 0;
 			}
-			setX ( newX );
+			x = newX;
 		}
 		
 		// Moves the Player left.
 		
 		else
 		{
-			int newX = getX ( ) + getSpeed ( );
+			int newX = (int) ( getX ( ) + getSpeed ( ) );
 			int panelWidth = getGamePanel ( ).getWidth ( );
 			if ( newX > panelWidth )
 			{
 				newX = panelWidth;
 			}
-			setX ( newX );
+			x = newX;
 		}
 	}
 	
@@ -69,6 +73,11 @@ public class Player extends Entity
 	public void movesRight ( boolean movesRight )
 	{
 		moveRight = movesRight;
+	}
+	
+	public void shoot ( )
+	{
+		//TODO
 	}
 	
 }
