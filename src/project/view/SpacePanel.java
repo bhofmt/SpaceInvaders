@@ -58,9 +58,12 @@ public class SpacePanel extends JPanel
 			
 		}
 		
-		for ( Projectile projectile : projectiles )
+		ArrayList<Projectile> cloneProjectiles = controller.cloneArrayList ( projectiles );
+		ArrayList<Enemy> cloneEnemies = controller.cloneArrayList ( enemies );
+		
+		for ( Projectile projectile : cloneProjectiles )
 		{
-			for ( Enemy enemy : enemies )
+			for ( Enemy enemy : cloneEnemies )
 			{
 				if ( projectile.intersects ( enemy ) )
 				{

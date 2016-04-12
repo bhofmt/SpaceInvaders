@@ -6,6 +6,7 @@ import project.listeners.TimeListener;
 import project.model.Enemy;
 import project.model.Player;
 import project.model.Projectile;
+import project.thread.Time;
 import project.view.SpacePanel;
 import project.view.SpaceView;
 
@@ -13,7 +14,9 @@ public class SpaceController implements TimeListener
 {
 	private static SpaceController controller = null;
 	
+	private int level = 0;
 	private Player player = null;
+	private Time timer = null;
 	private ArrayList<Enemy> enemies = new ArrayList<Enemy> ( );
 	private ArrayList<Projectile> projectiles = new ArrayList<Projectile> ( );
 	
@@ -37,15 +40,26 @@ public class SpaceController implements TimeListener
 	
 	private void moveActions ( )
 	{
+		ArrayList<Projectile> cloneProjectiles = new ArrayList<Projectile> ( );
+		for ( Projectile projectile : projectiles )
+		{
+			cloneProjectiles.add ( projectile );
+		}
+		ArrayList<Enemy> cloneEnemies = new ArrayList<Enemy> ( );
+		for ( Enemy enemy : enemies )
+		{
+			cloneEnemies.add ( enemy );
+		}
+		
 		if ( player != null )
 		{
 			player.move ( );
 		}
-		for ( Enemy enemy : enemies )
+		for ( Enemy enemy : cloneEnemies )
 		{
 			enemy.move ( );
 		}
-		for ( Projectile projectile : projectiles )
+		for ( Projectile projectile : cloneProjectiles )
 		{
 			projectile.move ( );
 		}
@@ -54,11 +68,7 @@ public class SpaceController implements TimeListener
 	private void checkActions ( )
 	{
 		
-		ArrayList<Projectile> clone = new ArrayList<Projectile> ( );
-		for ( Projectile projectile : projectiles )
-		{
-			clone.add ( projectile );
-		}
+		ArrayList<Projectile> clone = controller.cloneArrayList ( projectiles );
 		
 		for ( Projectile projectile : clone )
 		{
@@ -78,6 +88,26 @@ public class SpaceController implements TimeListener
 		SpacePanel gamePanel = getGamePanel ( );
 		gamePanel.validate ( );
 		gamePanel.repaint ( );
+		
+		String cannonText = "<html>";
+		if ( player.canFire ( ) )
+		{
+			cannonText += "Cannon Ready";
+		}
+		else
+		{
+			cannonText += "Overheated";
+		}
+		cannonText += "</html>";
+		gui.changeCannonStatusText ( cannonText );
+	}
+	
+	private void levelActions ( )
+	{
+		if ( levelWasCleared ( ) )
+		{
+			nextLevel ( );
+		}
 	}
 	
 	public void timeTick ( )
@@ -85,11 +115,39 @@ public class SpaceController implements TimeListener
 		moveActions ( );
 		checkActions ( );
 		updateActions ( );
+		levelActions ( );
+	}
+	
+	public void nextLevel ( )
+	{
+		for ( int i = 0; i < level + 1; i++ )
+		{
+			Enemy enemy = new Enemy ( 0, 0, 3 );
+			addEnemy ( enemy );
+		}
+		
+		this.level++;
+	}
+	
+	public boolean levelWasCleared ( )
+	{
+		if ( enemies.size ( ) == 0 )
+		{
+			return true;
+		}
+		return false;
 	}
 	
 	public void makePlayerShoot ( )
 	{
 		player.shoot ( );
+	}
+	
+	public void enemyPassed ( )
+	{
+		timer.requestPause ( );
+		enemies.clear ( );
+		SpaceView.getInstanceOf ( ).setGamePanelText ( "<html>GAME OVER</html>" );
 	}
 	
 	public void addEnemy ( Enemy enemy )
@@ -100,6 +158,16 @@ public class SpaceController implements TimeListener
 	public void addProjectile ( Projectile projectile )
 	{
 		projectiles.add ( projectile );
+	}
+	
+	public <T> ArrayList<T> cloneArrayList ( ArrayList<T> list )
+	{
+		ArrayList<T> clonedList = new ArrayList<T> ( );
+		for ( T entry : list )
+		{
+			clonedList.add ( entry );
+		}
+		return clonedList;
 	}
 	
 	public static SpacePanel getGamePanel ( )
@@ -140,5 +208,20 @@ public class SpaceController implements TimeListener
 	public ArrayList<Projectile> getProjectiles ( )
 	{
 		return projectiles;
+	}
+	
+	public Time getTimer ( )
+	{
+		return timer;
+	}
+	
+	public void setTimer ( Time timer )
+	{
+		this.timer = timer;
+	}
+
+	public int getLevel ( )
+	{
+		return level;
 	}
 }

@@ -9,7 +9,9 @@ public class Player extends Entity
 	private static final int DEFAULTHEIGHT = 10;
 	private static final int DEFAULTWIDTH = 10;
 	private static final int DEFAULTSPEED = 4;
+	private static final int DEFAULTMAXPROJECTILES = 1;
 	
+	private int maxProjectiles;
 	private String playerName;
 	private boolean moveLeft = false, moveRight = false;
 	
@@ -29,7 +31,9 @@ public class Player extends Entity
 		playerName = name;
 		height = DEFAULTHEIGHT;
 		width = DEFAULTWIDTH;
+		maxProjectiles = DEFAULTMAXPROJECTILES;
 		setSpeed ( DEFAULTSPEED );
+		
 	}
 	
 	@Override
@@ -71,9 +75,23 @@ public class Player extends Entity
 	
 	public void shoot ( )
 	{
-		Projectile projectile = new Projectile ( ( int ) getX ( ), ( int ) getY ( ) - 2 );
-		
-		SpaceController.getInstanceOf ( ).addProjectile ( projectile );
+		if ( canFire ( ) )
+		{
+			Projectile projectile = new Projectile ( ( int ) getX ( ), ( int ) getY ( ) - 2 );
+
+			SpaceController controller = SpaceController.getInstanceOf ( );
+			controller.addProjectile ( projectile );
+		}
+	}
+	
+	public boolean canFire ( )
+	{
+		SpaceController controller = SpaceController.getInstanceOf ( );
+		if ( controller.getProjectiles ( ).size ( ) < maxProjectiles )
+		{
+			return true;
+		}
+		return false;
 	}
 	
 	public String getPlayerName ( )
@@ -89,6 +107,16 @@ public class Player extends Entity
 	public void movesRight ( boolean movesRight )
 	{
 		moveRight = movesRight;
+	}
+	
+	public int getMaxProjectiles ( )
+	{
+		return maxProjectiles;
+	}
+	
+	public void setMaxProjectiles ( int maxProjectiles )
+	{
+		this.maxProjectiles = maxProjectiles;
 	}
 	
 }
