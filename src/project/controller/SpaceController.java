@@ -102,8 +102,52 @@ public class SpaceController implements TimeListener
 			cannonText += "Overheated";
 		}
 		cannonText += "</html>";
+		
+		// Puts the timer for the next spawn wave together.
+		
+		String waveTimerText = "";
+		if ( nextWaveIsComing )
+		{
+			String timeText = Integer.toString ( timeUntilNextSpawn );
+			String seconds = "";
+			String splitSeconds = "";
+			if ( timeText.length ( ) > 3 )
+			{
+				seconds += timeText.substring ( 0, timeText.length ( ) - 3 );
+			}
+			else if ( timeText.length ( ) == 3 )
+			{
+				seconds += timeText.substring ( 0, 1 );
+			}
+			
+			splitSeconds = timeText.substring ( seconds.length ( ) );
+			
+			if ( splitSeconds.length ( ) < 2 )
+			{
+				splitSeconds = "0" + splitSeconds;
+			}
+			
+			if ( seconds.length ( ) <= 1 )
+			{
+				waveTimerText = "0" + waveTimerText;
+			}
+			
+			if ( seconds.length ( ) < 1 )
+			{
+				seconds += "0";
+			}
+			
+			waveTimerText += seconds + ":" + splitSeconds;
+		}
+		
+		else
+		{
+			waveTimerText += "00:00";
+		}
+		
 		gui.changeCannonStatusText ( cannonText );
 		gui.changeLevelStatusText ( );
+		gamePanel.setWaveTimerText ( waveTimerText );
 	}
 	
 	private void levelActions ( )
@@ -127,6 +171,27 @@ public class SpaceController implements TimeListener
 		levelActions ( );
 	}
 	
+	/**
+	 * Spawns the next enemy.
+	 */
+	public void spawnNextEnemy ( )
+	{
+		incomingEnemies--;
+		if ( incomingEnemies <= 0 )
+		{
+			nextWaveIsComing = false;
+			timeUntilNextSpawn = 500;
+		}
+		else
+		{
+			timeUntilNextSpawn = 80;
+		}
+		addEnemy ( new Enemy ( 0, 0, 3 ) );
+	}
+	
+	/**
+	 * Performs all wave-related actions.
+	 */
 	public void waveActions ( )
 	{
 		if ( timeUntilNextSpawn > 0 )
@@ -135,28 +200,24 @@ public class SpaceController implements TimeListener
 		}
 		else
 		{
-			incomingEnemies--;
-			if ( incomingEnemies <= 0 )
-			{
-				nextWaveIsComing = false;
-				timeUntilNextSpawn = 10000;
-			}
-			else
-			{
-				timeUntilNextSpawn = 80;
-			}
-			addEnemy ( new Enemy ( 0, 0, 3 ) );
+			spawnNextEnemy ( );
 		}
 	}
 	
+	/**
+	 * Initiates the next spawn wave
+	 */
 	public void nextLevel ( )
 	{
 		nextWaveIsComing = true;
-		timeUntilNextSpawn = 1000;
+		timeUntilNextSpawn = 500;
 		level++;
 		incomingEnemies = level + 1;
 	}
 	
+	/**
+	 * Checks if the level was cleared.
+	 */
 	public boolean levelWasCleared ( )
 	{
 		if ( enemies.size ( ) == 0 && !nextWaveIsComing )
@@ -166,11 +227,17 @@ public class SpaceController implements TimeListener
 		return false;
 	}
 	
+	/**
+	 * Makes the player shoot.
+	 */
 	public void makePlayerShoot ( )
 	{
 		player.shoot ( );
 	}
 	
+	/**
+	 * Is performed when an enemy manages to get completely through.
+	 */
 	public void enemyPassed ( )
 	{
 		timer.requestPause ( );
