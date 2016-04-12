@@ -1,5 +1,6 @@
 package project.controller;
 
+import java.awt.Dimension;
 import java.util.ArrayList;
 
 import project.listeners.TimeListener;
@@ -43,16 +44,8 @@ public class SpaceController implements TimeListener
 	
 	private void moveActions ( )
 	{
-		ArrayList<Projectile> cloneProjectiles = new ArrayList<Projectile> ( );
-		for ( Projectile projectile : projectiles )
-		{
-			cloneProjectiles.add ( projectile );
-		}
-		ArrayList<Enemy> cloneEnemies = new ArrayList<Enemy> ( );
-		for ( Enemy enemy : enemies )
-		{
-			cloneEnemies.add ( enemy );
-		}
+		ArrayList<Projectile> cloneProjectiles = controller.cloneArrayList ( projectiles );
+		ArrayList<Enemy> cloneEnemies = controller.cloneArrayList ( enemies );
 		
 		if ( player != null )
 		{
@@ -186,7 +179,9 @@ public class SpaceController implements TimeListener
 		{
 			timeUntilNextSpawn = 80;
 		}
-		addEnemy ( new Enemy ( 0, 0, 3 ) );
+		Enemy enemy = new Enemy ( 0, 0, 3 );
+		enemy.setSize ( new Dimension ( 25, 20 ) );
+		addEnemy ( enemy );
 	}
 	
 	/**

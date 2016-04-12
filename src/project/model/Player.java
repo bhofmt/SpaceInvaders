@@ -77,8 +77,9 @@ public class Player extends Entity
 	{
 		if ( canFire ( ) )
 		{
-			Projectile projectile = new Projectile ( ( int ) getX ( ), ( int ) getY ( ) - 2 );
-
+			Projectile projectile = new Projectile ( ( int ) ( getX ( ) + getWidth ( ) / 2 ), ( int ) getY ( ) - 2 );
+			projectile.x -= projectile.getWidth ( ) / 2;
+			
 			SpaceController controller = SpaceController.getInstanceOf ( );
 			controller.addProjectile ( projectile );
 		}
