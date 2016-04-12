@@ -6,7 +6,6 @@ import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Image;
 import java.awt.image.BufferedImage;
-import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
@@ -26,6 +25,7 @@ public class SpacePanel extends JPanel
 	private String gameOverText = "";
 	private Image alien;
 	private Image ship;
+	private Image projectile;
 
 	public SpacePanel ()
 	{
@@ -35,6 +35,7 @@ public class SpacePanel extends JPanel
 
 		alien = readImage ( "images/alien.png" );
 		ship = readImage ( "images/ship.png" );
+		projectile = readImage ( "images/projectile.png" );
 	}
 
 	@Override
@@ -66,9 +67,8 @@ public class SpacePanel extends JPanel
 		g2d.setColor ( Color.RED );
 
 		for ( Projectile projectile : projectiles )
-		{
-			g2d.fillRect ( (int) projectile.getX (), (int) projectile.getY (), (int) projectile.getWidth (),
-					(int) projectile.getHeight () );
+		{	
+			g2d.drawImage ( this.projectile, (int) projectile.x, (int) projectile.y, (int) projectile.getWidth (), (int) projectile.getHeight (), null );
 		}
 
 		for ( Projectile projectile : cloneProjectiles )
