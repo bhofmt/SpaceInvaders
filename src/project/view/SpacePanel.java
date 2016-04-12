@@ -25,6 +25,7 @@ public class SpacePanel extends JPanel
 	private SpaceController controller;
 	private String gameOverText = "";
 	private Image alien;
+	private Image ship;
 
 	public SpacePanel ()
 	{
@@ -33,6 +34,7 @@ public class SpacePanel extends JPanel
 		requestFocusInWindow ( true );
 
 		alien = readImage ( "images/alien.png" );
+		ship = readImage ( "images/ship.png" );
 	}
 
 	@Override
@@ -49,23 +51,17 @@ public class SpacePanel extends JPanel
 		Player player = controller.getPlayer ();
 
 		// Draw all enemies
-		g2d.setColor ( Color.RED );
 		for ( Enemy enemy : enemies )
 		{
-//			g2d.fillRect ( (int) enemy.getX (), (int) enemy.getY (), (int) enemy.getWidth (),
-//					(int) enemy.getHeight () );
-
-			g2d.drawImage ( alien, (int) enemy.getX (), (int) enemy.getY (), (int) ( alien.getWidth ( null ) / 3 ),
-					(int) ( alien.getHeight ( null ) / 3 ), null );
-
-			enemy.height = (int) ( alien.getHeight ( null ) / 3 );
-			enemy.width = (int) ( alien.getWidth ( null ) / 3 );
+			g2d.drawImage ( alien, (int) enemy.getX (), (int) enemy.getY (), (int) ( enemy.getWidth ( ) ),
+					(int) ( enemy.getHeight ( ) ), null );
 		}
 
 		// Draw the Player.
-		g2d.setColor ( Color.BLUE );
-		g2d.fillRect ( (int) player.getX (), (int) player.getY (), (int) player.getWidth (),
-				(int) player.getHeight () );
+		g2d.drawImage ( ship, (int) player.getX ( ), (int) player.getY ( ), (int) player.getWidth ( ), (int) player.getHeight ( ), null );
+
+		player.height = (int) ( ship.getHeight ( null ) / 2 );
+		player.width = (int) ( ship.getWidth ( null ) / 2 );
 
 		g2d.setColor ( Color.RED );
 
