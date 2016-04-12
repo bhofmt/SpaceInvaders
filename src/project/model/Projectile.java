@@ -25,9 +25,9 @@ public class Projectile extends Entity
 	public void move ( )
 	{
 		int newYCoord = ( int ) ( getY ( ) - getSpeed ( ) );
-		if ( newYCoord < 0 )
+		if ( newYCoord + getHeight ( ) < 0 )
 		{
-			newYCoord = 0;
+			newYCoord = 0 - (int)getHeight ( );
 		}
 		y = newYCoord;
 	}

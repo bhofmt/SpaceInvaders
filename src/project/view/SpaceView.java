@@ -24,7 +24,6 @@ public class SpaceView extends JFrame
 	
 	private static final JLabel levelStatus = new JLabel ( );
 	private static final JLabel cannonStatus = new JLabel ( );
-	private static final JLabel gamePanelText = new JLabel ( "Test" );
 	
 	private static SpaceView gui = null;
 	private static SpaceController controller = SpaceController.getInstanceOf ( );
@@ -61,16 +60,6 @@ public class SpaceView extends JFrame
 		frame.setLocation ( dx, dy );
 		frame.setVisible ( true );
 		frame.setResizable ( false );
-	}
-	
-	private static void centerLabel ( JLabel label, JPanel panel )
-	{
-		Dimension panelSize = panel.getSize ( );
-		GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment ( );
-		Point centerPoint = ge.getCenterPoint ( );
-		
-		int dx = centerPoint.x - panelSize.width / 2;
-		int dy = centerPoint.y - panelSize.height / 2;
 	}
 	
 	private static void addKeyListener ( )
@@ -149,14 +138,13 @@ public class SpaceView extends JFrame
 		userInterface.setBackground ( Color.BLACK );
 		userInterface.setPreferredSize ( new Dimension ( borderPanel.getWidth ( ), 100 ) );
 		
-		gamePanelText.setForeground ( Color.WHITE );
-		centerLabel ( gamePanelText, gamePanel );
-		gamePanel.add ( gamePanelText );
-		
 		gamePanel.setBackground ( Color.DARK_GRAY );
 		
 		cannonStatus.setForeground ( Color.WHITE );
 		userInterface.add ( cannonStatus );
+		
+		levelStatus.setForeground ( Color.WHITE );
+		userInterface.add ( levelStatus );
 		
 		borderPanel.add ( gamePanel, BorderLayout.CENTER );
 		borderPanel.add ( userInterface, BorderLayout.NORTH );
@@ -192,11 +180,6 @@ public class SpaceView extends JFrame
 	public void changeCannonStatusText ( String s )
 	{
 		cannonStatus.setText ( s );
-	}
-	
-	public void setGamePanelText ( String s )
-	{
-		gamePanelText.setText ( s );
 	}
 	
 	public static void main ( String[] args )

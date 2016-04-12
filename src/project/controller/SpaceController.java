@@ -14,6 +14,9 @@ public class SpaceController implements TimeListener
 {
 	private static SpaceController controller = null;
 	
+	private boolean nextWaveIsComing;
+	private int timeUntilNextSpawn;
+	private int incomingEnemies = 1;
 	private int level = 0;
 	private Player player = null;
 	private Time timer = null;
@@ -72,7 +75,7 @@ public class SpaceController implements TimeListener
 		
 		for ( Projectile projectile : clone )
 		{
-			if ( projectile.getY ( ) <= 0 )
+			if ( projectile.getY ( ) <= 0 - projectile.getHeight ( ) )
 			{
 				projectiles.remove ( projectile );
 			}
@@ -100,6 +103,7 @@ public class SpaceController implements TimeListener
 		}
 		cannonText += "</html>";
 		gui.changeCannonStatusText ( cannonText );
+		gui.changeLevelStatusText ( );
 	}
 	
 	private void levelActions ( )
@@ -107,6 +111,11 @@ public class SpaceController implements TimeListener
 		if ( levelWasCleared ( ) )
 		{
 			nextLevel ( );
+		}
+		
+		if ( nextWaveIsComing )
+		{
+			waveActions ( );
 		}
 	}
 	
@@ -118,20 +127,39 @@ public class SpaceController implements TimeListener
 		levelActions ( );
 	}
 	
+	public void waveActions ( )
+	{
+		if ( timeUntilNextSpawn > 0 )
+		{
+			timeUntilNextSpawn--;
+		}
+		else
+		{
+			incomingEnemies--;
+			if ( incomingEnemies <= 0 )
+			{
+				nextWaveIsComing = false;
+				timeUntilNextSpawn = 10000;
+			}
+			else
+			{
+				timeUntilNextSpawn = 80;
+			}
+			addEnemy ( new Enemy ( 0, 0, 3 ) );
+		}
+	}
+	
 	public void nextLevel ( )
 	{
-		for ( int i = 0; i < level + 1; i++ )
-		{
-			Enemy enemy = new Enemy ( 0, 0, 3 );
-			addEnemy ( enemy );
-		}
-		
-		this.level++;
+		nextWaveIsComing = true;
+		timeUntilNextSpawn = 1000;
+		level++;
+		incomingEnemies = level + 1;
 	}
 	
 	public boolean levelWasCleared ( )
 	{
-		if ( enemies.size ( ) == 0 )
+		if ( enemies.size ( ) == 0 && !nextWaveIsComing )
 		{
 			return true;
 		}
@@ -146,8 +174,7 @@ public class SpaceController implements TimeListener
 	public void enemyPassed ( )
 	{
 		timer.requestPause ( );
-		enemies.clear ( );
-		SpaceView.getInstanceOf ( ).setGamePanelText ( "<html>GAME OVER</html>" );
+		getGamePanel ( ).setGameOverText ( "Game Over" );
 	}
 	
 	public void addEnemy ( Enemy enemy )
@@ -219,7 +246,7 @@ public class SpaceController implements TimeListener
 	{
 		this.timer = timer;
 	}
-
+	
 	public int getLevel ( )
 	{
 		return level;
