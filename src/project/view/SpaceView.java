@@ -8,6 +8,7 @@ import java.awt.KeyEventDispatcher;
 import java.awt.KeyboardFocusManager;
 import java.awt.Point;
 import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 
 import javax.swing.Box;
 import javax.swing.BoxLayout;
@@ -65,54 +66,54 @@ public class SpaceView extends JFrame
 	
 	private static void addKeyListener ( )
 	{
-		KeyEventDispatcher keyEventDispatcher = new KeyEventDispatcher ( )
+		KeyListener keyListener = new KeyListener ( )
 		{
+			private SpaceController ctrl = SpaceController.getInstanceOf ( );
+			
 			@Override
-			public boolean dispatchKeyEvent ( final KeyEvent ke )
+			public void keyTyped ( KeyEvent e )
 			{
-				SpaceController ctrl = SpaceController.getInstanceOf ( );
-				
-				if ( ke.getKeyCode ( ) == KeyEvent.KEY_PRESSED )
-				{
-					System.out.println ( "Pressed" );
-					switch ( ke.getModifiers ( ) )
-					{
-					case KeyEvent.VK_LEFT:
-					case KeyEvent.VK_A:
-						ctrl.movePlayerLeft ( true );
-						break;
-					case KeyEvent.VK_RIGHT:
-					case KeyEvent.VK_D:
-						ctrl.movePlayerRight ( true );
-						break;
-					case KeyEvent.VK_SPACE:
-						ctrl.makePlayerShoot ();
-						break;
-					}
-					return true;
-				}
-				else if ( ke.getModifiers ( ) == KeyEvent.KEY_RELEASED )
-				{
-					System.out.println ( "Released" );
-					switch ( ke.getKeyChar ( ) )
-					{
-					case KeyEvent.VK_LEFT:
-					case KeyEvent.VK_A:
-						ctrl.movePlayerLeft ( false );
-						break;
-					case KeyEvent.VK_RIGHT:
-					case KeyEvent.VK_D:
-						ctrl.movePlayerRight ( false );
-						break;
-					}
-					return true;
-				}
-				
-				return false;
-				
+				// Do nothing.
 			}
+			
+			@Override
+			public void keyPressed ( KeyEvent e )
+			{
+				switch ( e.getKeyCode ( ) )
+				{
+				case KeyEvent.VK_LEFT:
+				case KeyEvent.VK_A:
+					ctrl.movePlayerLeft ( true );
+					break;
+				case KeyEvent.VK_RIGHT:
+				case KeyEvent.VK_D:
+					ctrl.movePlayerRight ( true );
+					break;
+				case KeyEvent.VK_SPACE:
+					ctrl.makePlayerShoot ( );
+					break;
+				}
+			}
+			
+			@Override
+			public void keyReleased ( KeyEvent e )
+			{
+				switch ( e.getKeyCode ( ) )
+				{
+				case KeyEvent.VK_LEFT:
+				case KeyEvent.VK_A:
+					ctrl.movePlayerLeft ( false );
+					break;
+				case KeyEvent.VK_RIGHT:
+				case KeyEvent.VK_D:
+					ctrl.movePlayerRight ( false );
+					break;
+				}
+			}
+			
 		};
-		KeyboardFocusManager.getCurrentKeyboardFocusManager ( ).addKeyEventDispatcher ( keyEventDispatcher );
+		
+		gamePanel.addKeyListener ( keyListener );
 	}
 	
 	private static void addGameEnvironment ( )
@@ -171,8 +172,8 @@ public class SpaceView extends JFrame
 	{
 		initiateGui ( );
 		
-		controller.setPlayer ( new Player ( ) );
-		controller.addEnemy ( new Enemy ( 15, 549 ) );
+		controller.setPlayer ( new Player ( 0, gamePanel.getHeight ( ) - 50 ) );
+		controller.addEnemy ( new Enemy ( 0, 0, 3 ) );
 		
 		Time timemaker = new Time ( );
 		

@@ -3,13 +3,19 @@ package project.model;
 public class Enemy extends Entity
 {
 	private static final long serialVersionUID = 5919647216294900080L;
-
-	public Enemy ( int x, int y )
+	
+	private static final int DEFAULTHEIGHT = 8;
+	private static final int DEFAULTWIDTH = 8;
+	private static final int ROWHEIGHT = 20;
+	
+	public Enemy ( int x, int y, int speed )
 	{
 		super ( x, y );
+		height = DEFAULTHEIGHT;
+		width = DEFAULTWIDTH;
+		setSpeed ( speed );
 	}
-
-	private static final int ROWHEIGHT = 20;
+	
 	
 	/**
 	 * Used to move the enemy around.
@@ -31,7 +37,7 @@ public class Enemy extends Entity
 		else if ( newX < 0 )
 		{
 			newX = 0;
-			y = (int)getY ( ) + ROWHEIGHT;
+			y = ( int ) getY ( ) + ROWHEIGHT;
 			movement = -movement;
 		}
 		

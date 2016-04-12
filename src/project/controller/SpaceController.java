@@ -19,7 +19,7 @@ public class SpaceController implements TimeListener
 	
 	private SpaceController ( )
 	{
-		
+	
 	}
 	
 	public static SpaceController getInstanceOf ( )
@@ -37,7 +37,10 @@ public class SpaceController implements TimeListener
 	
 	private void moveActions ( )
 	{
-		player.move ( );
+		if ( player != null )
+		{
+			player.move ( );
+		}
 		for ( Enemy enemy : enemies )
 		{
 			enemy.move ( );
@@ -50,7 +53,14 @@ public class SpaceController implements TimeListener
 	
 	private void checkActions ( )
 	{
+		
+		ArrayList<Projectile> clone = new ArrayList<Projectile> ( );
 		for ( Projectile projectile : projectiles )
+		{
+			clone.add ( projectile );
+		}
+		
+		for ( Projectile projectile : clone )
 		{
 			if ( projectile.getY ( ) <= 0 )
 			{
@@ -61,8 +71,13 @@ public class SpaceController implements TimeListener
 	
 	private void updateActions ( )
 	{
-		SpaceView.getInstanceOf ( ).validate ( );
-		SpaceView.getInstanceOf ( ).repaint ( );
+		SpaceView gui = SpaceView.getInstanceOf ( );
+		gui.validate ( );
+		gui.repaint ( );
+		
+		SpacePanel gamePanel = getGamePanel ( );
+		gamePanel.validate ( );
+		gamePanel.repaint ( );
 	}
 	
 	public void timeTick ( )
@@ -80,6 +95,11 @@ public class SpaceController implements TimeListener
 	public void addEnemy ( Enemy enemy )
 	{
 		enemies.add ( enemy );
+	}
+	
+	public void addProjectile ( Projectile projectile )
+	{
+		projectiles.add ( projectile );
 	}
 	
 	public static SpacePanel getGamePanel ( )
@@ -112,12 +132,12 @@ public class SpaceController implements TimeListener
 		player.movesRight ( b );
 	}
 	
-	public ArrayList<Enemy> getEnemies()
+	public ArrayList<Enemy> getEnemies ( )
 	{
 		return enemies;
 	}
-
-	public ArrayList<Projectile> getProjectiles()
+	
+	public ArrayList<Projectile> getProjectiles ( )
 	{
 		return projectiles;
 	}

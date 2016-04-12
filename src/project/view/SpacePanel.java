@@ -19,12 +19,13 @@ public class SpacePanel extends JPanel
 	public SpacePanel ()
 	{
 		controller = SpaceController.getInstanceOf ();
+		setFocusable ( true );
+		requestFocusInWindow ( true );
 	}
 
 	@Override
 	protected void paintComponent(Graphics g)
 	{
-		getWidth ();
 		ArrayList<Enemy> enemies = controller.getEnemies ();
 		ArrayList<Projectile> projectiles = controller.getProjectiles ();
 		
