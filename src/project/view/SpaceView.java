@@ -26,7 +26,7 @@ public class SpaceView extends JFrame
 	private static final JLabel cannonStatus = new JLabel ( );
 	
 	private static SpaceView gui = null;
-	private static SpaceController controller = SpaceController.getInstanceOf ( );
+	private static SpaceController controller = null;
 	private static SpacePanel gamePanel = null;
 	
 	private SpaceView ( )
@@ -116,6 +116,8 @@ public class SpaceView extends JFrame
 	
 	private static void addGameEnvironment ( )
 	{
+		controller = SpaceController.getInstanceOf ( );
+		
 		JPanel borderPanel = new JPanel ( new BorderLayout ( ) );
 		JPanel userInterface = new JPanel ( );
 		Dimension expectedDimension = new Dimension ( gui.getWidth ( ) - 100, gui.getHeight ( ) - 100 );
