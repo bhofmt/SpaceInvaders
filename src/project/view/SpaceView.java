@@ -4,8 +4,6 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.GraphicsEnvironment;
-import java.awt.KeyEventDispatcher;
-import java.awt.KeyboardFocusManager;
 import java.awt.Point;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
@@ -13,19 +11,20 @@ import java.awt.event.KeyListener;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 import project.controller.SpaceController;
-import project.model.Enemy;
 import project.model.Player;
 import project.thread.Time;
 
 public class SpaceView extends JFrame
 {
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 1L;
+	
+	private static final JLabel levelStatus = new JLabel ( );
+	private static final JLabel cannonStatus = new JLabel ( );
+	private static final JLabel gamePanelText = new JLabel ( "Test" );
 	
 	private static SpaceView gui = null;
 	private static SpaceController controller = SpaceController.getInstanceOf ( );
@@ -62,6 +61,16 @@ public class SpaceView extends JFrame
 		frame.setLocation ( dx, dy );
 		frame.setVisible ( true );
 		frame.setResizable ( false );
+	}
+	
+	private static void centerLabel ( JLabel label, JPanel panel )
+	{
+		Dimension panelSize = panel.getSize ( );
+		GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment ( );
+		Point centerPoint = ge.getCenterPoint ( );
+		
+		int dx = centerPoint.x - panelSize.width / 2;
+		int dy = centerPoint.y - panelSize.height / 2;
 	}
 	
 	private static void addKeyListener ( )
@@ -140,7 +149,14 @@ public class SpaceView extends JFrame
 		userInterface.setBackground ( Color.BLACK );
 		userInterface.setPreferredSize ( new Dimension ( borderPanel.getWidth ( ), 100 ) );
 		
+		gamePanelText.setForeground ( Color.WHITE );
+		centerLabel ( gamePanelText, gamePanel );
+		gamePanel.add ( gamePanelText );
+		
 		gamePanel.setBackground ( Color.DARK_GRAY );
+		
+		cannonStatus.setForeground ( Color.WHITE );
+		userInterface.add ( cannonStatus );
 		
 		borderPanel.add ( gamePanel, BorderLayout.CENTER );
 		borderPanel.add ( userInterface, BorderLayout.NORTH );
@@ -168,14 +184,29 @@ public class SpaceView extends JFrame
 		gui.repaint ( );
 	}
 	
+	public void changeLevelStatusText ( )
+	{
+		levelStatus.setText ( "<html>Level: " + controller.getLevel ( ) + "</html>" );
+	}
+	
+	public void changeCannonStatusText ( String s )
+	{
+		cannonStatus.setText ( s );
+	}
+	
+	public void setGamePanelText ( String s )
+	{
+		gamePanelText.setText ( s );
+	}
+	
 	public static void main ( String[] args )
 	{
 		initiateGui ( );
 		
 		controller.setPlayer ( new Player ( 0, gamePanel.getHeight ( ) - 50 ) );
-		controller.addEnemy ( new Enemy ( 0, 0, 3 ) );
 		
 		Time timemaker = new Time ( );
+		controller.setTimer ( timemaker );
 		
 		timemaker.addListener ( controller );
 		timemaker.start ( );
