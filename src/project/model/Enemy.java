@@ -11,7 +11,7 @@ public class Enemy extends Entity
 	private static final long serialVersionUID = 5919647216294900080L;
 	
 	private static final int DEFAULTHEIGHT = 20;
-	private static final int DEFAULTWIDTH = 25;
+	private static final int DEFAULTWIDTH = 28;
 	private static final int ROWHEIGHT = 40;
 	private static final int MAXROWS = 5;
 	private static final int DEFAULTSTARTINGHEALTH = 1;

@@ -15,6 +15,7 @@ import project.model.Entity;
 import project.model.Player;
 import project.model.Projectile;
 import project.model.Spaceship;
+import project.sound.SoundManager;
 import project.thread.Time;
 import project.view.SpacePanel;
 import project.view.SpaceView;
@@ -104,7 +105,9 @@ public class SpaceController implements TimeListener
 		}
 		cannonText += "</html>";
 		
-		// Puts the timer for the next spawn wave together.
+		String healthText = Integer.toString ( player.getHealthPoints ( ) );
+		
+		// Assembles the timer text for the next spawn.
 		
 		String waveTimerText = "";
 		if ( nextWaveIsComing )
@@ -149,6 +152,7 @@ public class SpaceController implements TimeListener
 		gui.changeCannonStatusText ( cannonText );
 		gui.changeLevelStatusText ( );
 		gamePanel.setWaveTimerText ( waveTimerText );
+		gamePanel.setHealthText ( healthText );
 	}
 	
 	private void levelActions ( )
@@ -194,11 +198,23 @@ public class SpaceController implements TimeListener
 		
 		if ( level % 5 == 0 )
 		{
-			enemy = new Spaceship ( 0, 30, random.nextInt ( 2 ) + 5 );
+			enemy = new Spaceship ( 0, 30, random.nextInt ( 3 ) + 3, 3 + ( level / 5 ) );
+		}
+		else if ( level < 10 )
+		{
+			enemy = new Enemy ( 0, 20, random.nextInt ( 2 ) + 3 );
 		}
 		else
 		{
-			enemy = new Enemy ( 0, 20, random.nextInt ( 2 ) + 3 );
+			int dice = random.nextInt ( 100 );
+			if ( dice < 30 )
+			{
+				enemy = new Spaceship ( 0, 30, random.nextInt ( 3 ) + 3, 3 + ( level / 5 ) );
+			}
+			else
+			{
+				enemy = new Enemy ( 0, 20, random.nextInt ( 2 ) + 3 );
+			}
 		}
 		addEnemy ( enemy );
 	}
@@ -255,7 +271,14 @@ public class SpaceController implements TimeListener
 		nextWaveIsComing = true;
 		timeUntilNextSpawn = 500;
 		level++;
-		incomingEnemies = level + 1;
+		if ( level % 5 == 0 && level > 0 )
+		{
+			incomingEnemies = level / 5;
+		}
+		else
+		{
+			incomingEnemies = level + 1;
+		}
 	}
 	
 	/**
@@ -265,6 +288,12 @@ public class SpaceController implements TimeListener
 	{
 		if ( enemies.size ( ) == 0 && !nextWaveIsComing )
 		{
+			if ( level % 5 == 0 && level > 0 )
+			{
+				player.setMaxProjectiles ( player.getMaxProjectiles ( ) + 1 );
+				player.setHealthPoints ( player.getHealthPoints ( ) + 1 );
+				player.setProjectileHealth ( player.getProjectileHealth ( ) + 1 );
+			}
 			return true;
 		}
 		return false;
@@ -284,7 +313,15 @@ public class SpaceController implements TimeListener
 	public void enemyPassed ( Entity enemy )
 	{
 		enemies.remove ( enemy );
-		player.setHealthPoints ( player.getHealthPoints ( ) - 1 );
+		if ( enemy instanceof Spaceship )
+		{
+			player.setHealthPoints ( player.getHealthPoints ( ) - 2 );
+		}
+		else
+		{
+			player.setHealthPoints ( player.getHealthPoints ( ) - 1 );
+		}
+		
 		if ( !player.isAlive ( ) )
 		{
 			gameOver ( );
@@ -295,6 +332,7 @@ public class SpaceController implements TimeListener
 	{
 		timer.requestPause ( );
 		getGamePanel ( ).setGameOverText ( "Game Over" );
+		SoundManager.stopSound();
 	}
 	
 	/**

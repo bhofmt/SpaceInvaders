@@ -1,9 +1,11 @@
 package project.view;
 
 import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.FontMetrics;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.Image;
 import java.util.ArrayList;
 
 import javax.swing.JPanel;
@@ -20,6 +22,8 @@ public class SpacePanel extends JPanel
 	private SpaceController controller;
 	private String gameOverText = "";
 	private String waveTimerText = "";
+	private String healthText = "";
+	private Image heart = controller.getInstanceOf ( ).readImage ( "images/heart.png" );
 	
 	public SpacePanel ( )
 	{
@@ -93,7 +97,7 @@ public class SpacePanel extends JPanel
 		// get the FontMetrics for the current font
 		fm = g2d.getFontMetrics ( );
 		
-		/** Putting the text in the corner */
+		/** Putting the spawn timer in the bottom right corner */
 		// Change the fontSize.
 		g2d.setFont ( g.getFont ( ).deriveFont ( 40F ) );
 		// get the FontMetrics for the current font
@@ -107,6 +111,27 @@ public class SpacePanel extends JPanel
 		
 		// draw String
 		g2d.drawString ( waveTimerText, xCoordinate, yCoordinate );
+		
+		/** Drawing a heart icon in the bottom left corner */
+		// Create a Dimension object for calculations.
+		Dimension heartDimension = new Dimension ( 50, 50 );
+		g2d.drawImage (	heart, 10, getHeight ( ) - 10 - ( int ) heartDimension.getHeight ( ), ( int ) heartDimension.getWidth ( ),
+						( int ) heartDimension.getHeight ( ), null );
+						
+		/** Putting the health counter in the bottom left corner */
+		// Change the fontSize.
+		g2d.setFont ( g.getFont ( ).deriveFont ( 50F ) );
+		// get the FontMetrics for the current font
+		fm = g2d.getFontMetrics ( );
+		// find the center location to display
+		stringWidth = fm.stringWidth ( healthText );
+		stringAccent = fm.getAscent ( );
+		// get the position of the leftmost character in the baseline
+		xCoordinate = 20 + ( int ) heartDimension.getWidth ( );
+		yCoordinate = getHeight ( ) - ( int ) ( heartDimension.getHeight ( ) / 2 );
+		
+		// draw String
+		g2d.drawString ( healthText, xCoordinate, yCoordinate );
 	}
 	
 	public void setGameOverText ( String s )
@@ -117,5 +142,10 @@ public class SpacePanel extends JPanel
 	public void setWaveTimerText ( String s )
 	{
 		waveTimerText = s;
+	}
+	
+	public void setHealthText ( String s )
+	{
+		this.healthText = s;
 	}
 }

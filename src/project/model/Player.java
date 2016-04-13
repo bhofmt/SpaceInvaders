@@ -9,7 +9,7 @@ public class Player extends Entity
 	
 	private static final int DEFAULTHEIGHT = 40;
 	private static final int DEFAULTWIDTH = 40;
-	private static final int DEFAULTSPEED = 4;
+	private static final int DEFAULTSPEED = 5;
 	private static final int DEFAULTMAXPROJECTILES = 1;
 	private static final int DEFAULTSTARTINGHEALTH = 3;
 	
@@ -17,6 +17,7 @@ public class Player extends Entity
 	private String playerName;
 	private boolean moveLeft = false, moveRight = false;
 	private int points;
+	private int projectileHealth;
 	
 	public Player ( )
 	{
@@ -38,6 +39,7 @@ public class Player extends Entity
 		setSpeed ( DEFAULTSPEED );
 		setImage ( SpaceController.getInstanceOf ( ).readImage ( "images/ship.png" ));
 		setHealthPoints ( DEFAULTSTARTINGHEALTH );
+		projectileHealth = 1;
 	}
 	
 	@Override
@@ -81,7 +83,7 @@ public class Player extends Entity
 	{
 		if ( canFire ( ) )
 		{
-			Projectile projectile = new Projectile ( ( int ) ( getX ( ) + getWidth ( ) / 2 ), ( int ) getY ( ) - 2 );
+			Projectile projectile = new Projectile ( ( int ) ( getX ( ) + getWidth ( ) / 2 ), ( int ) getY ( ) - 2, projectileHealth );
 			projectile.x -= projectile.getWidth ( ) / 2;
 			
 			SpaceController controller = SpaceController.getInstanceOf ( );
@@ -132,6 +134,16 @@ public class Player extends Entity
 	public void setPoints ( int points )
 	{
 		this.points = points;
+	}
+
+	public int getProjectileHealth ( )
+	{
+		return projectileHealth;
+	}
+
+	public void setProjectileHealth ( int projectileHealth )
+	{
+		this.projectileHealth = projectileHealth;
 	}
 	
 }

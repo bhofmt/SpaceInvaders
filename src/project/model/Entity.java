@@ -31,6 +31,7 @@ public abstract class Entity extends Rectangle
 		if ( !targetList.contains ( attacker ) )
 		{
 			healthPoints--;
+			targetList.add ( attacker );
 		}
 	}
 	
