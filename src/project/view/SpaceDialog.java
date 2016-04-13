@@ -1,5 +1,6 @@
 package project.view;
 
+import java.awt.Color;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
@@ -10,11 +11,16 @@ import javax.swing.JPanel;
 import javax.swing.JPasswordField;
 import javax.swing.JTextField;
 
+import net.keecode.event.EventManager;
+import project.listeners.SoundListener;
+
 public class SpaceDialog extends JDialog
 {
 	private static final long serialVersionUID = 3365359809911406812L;
-	
+
 	private SpaceView spaceView;
+
+	private int heightOfErrorSpace = 0;
 
 	private int heightOfComponents = 40;
 	private int widthOfComponents = 400;
@@ -25,11 +31,13 @@ public class SpaceDialog extends JDialog
 	private int widthOfApplyButton = 100;
 	private int leftSpaceToApplyButton = 309;
 	private int topSpaceToApplyButtonFromComponents = 5;
-	
+
 	private int bottomSpaceToDialogBorderFromApplyButton = 10;
 	private int rightSpaceToDialogBorderFromComponents = 10;
 
 	private JPanel panel = new JPanel ( null );
+
+	private JLabel dbError = new JLabel ( "" );
 
 	private JLabel dbAdressRequest = new JLabel ( "Adresse der Datenbank:" );
 	private JTextField dbAdress = new JTextField ();
@@ -40,35 +48,22 @@ public class SpaceDialog extends JDialog
 
 	private JButton btnApply = new JButton ( "Bestätigen" );
 
-	public SpaceDialog (SpaceView spaceView)
+	private boolean showDBAdressError = false;
+	private boolean showDBUsernameError = false;
+
+	public SpaceDialog ( SpaceView spaceView )
 	{
 		this.setSpaceView ( spaceView );
-		
+
 		setName ( "Datenbankverbindung" );
 		setAlwaysOnTop ( true );
 		setDefaultCloseOperation ( HIDE_ON_CLOSE );
-		setSize ( leftSpaceToComponents + widthOfComponents + rightSpaceToDialogBorderFromComponents + 6, topSpaceToComponents + ( 6 * heightOfComponents ) + topSpaceToApplyButtonFromComponents + heightOfApplyButton + bottomSpaceToDialogBorderFromApplyButton + 28 );
+
+		setAllBoundsAndSizes ();
+
 		setResizable ( false );
 
-		getPanel ().setBounds ( 0, 0, getWidth (), getHeight () );
-
-		getDBAdressRequest ().setBounds ( leftSpaceToComponents, topSpaceToComponents, widthOfComponents,
-				heightOfComponents );
-		getDBAdress ().setBounds ( leftSpaceToComponents, topSpaceToComponents + heightOfComponents, widthOfComponents,
-				heightOfComponents );
-		getDBUsernameRequest ().setBounds ( leftSpaceToComponents, topSpaceToComponents + ( 2 * heightOfComponents ),
-				widthOfComponents, heightOfComponents );
-		getDBUsername ().setBounds ( leftSpaceToComponents, topSpaceToComponents + ( 3 * heightOfComponents ),
-				widthOfComponents, heightOfComponents );
-		getDBPasswordRequest ().setBounds ( 10, topSpaceToComponents + ( 4 * heightOfComponents ), widthOfComponents,
-				heightOfComponents );
-		getDBPassword ().setBounds ( leftSpaceToComponents, topSpaceToComponents + ( 5 * heightOfComponents ),
-				widthOfComponents, heightOfComponents );
-
-		getBTNApply ().setBounds ( leftSpaceToApplyButton,
-				topSpaceToComponents + ( 6 * heightOfComponents ) + topSpaceToApplyButtonFromComponents,
-				widthOfApplyButton, heightOfApplyButton );
-
+		getPanel ().add ( getDBError () );
 		getPanel ().add ( getDBAdressRequest () );
 		getPanel ().add ( getDBAdress () );
 		getPanel ().add ( getDBUsernameRequest () );
@@ -76,12 +71,50 @@ public class SpaceDialog extends JDialog
 		getPanel ().add ( getDBPasswordRequest () );
 		getPanel ().add ( getDBPassword () );
 
+		getDBError ().setForeground ( Color.RED );
+
 		getPanel ().add ( getBTNApply () );
 		addBTNApplyListener ();
 
 		add ( getPanel () );
 
 		setVisible ( true );
+	}
+
+	private void setAllBoundsAndSizes()
+	{
+		setSize ( leftSpaceToComponents + widthOfComponents + rightSpaceToDialogBorderFromComponents + 6,
+				topSpaceToComponents + getHeightOfErrorSpace () + ( 6 * heightOfComponents )
+						+ topSpaceToApplyButtonFromComponents + heightOfApplyButton
+						+ bottomSpaceToDialogBorderFromApplyButton + 28 );
+
+		getPanel ().setBounds ( 0, 0, getWidth (), getHeight () );
+
+		getDBError ().setBounds ( leftSpaceToComponents, topSpaceToComponents, widthOfComponents,
+				getHeightOfErrorSpace () );
+		getDBAdressRequest ().setBounds ( leftSpaceToComponents, topSpaceToComponents + getHeightOfErrorSpace (),
+				widthOfComponents, heightOfComponents );
+		getDBAdress ().setBounds ( leftSpaceToComponents,
+				topSpaceToComponents + getHeightOfErrorSpace () + heightOfComponents, widthOfComponents,
+				heightOfComponents );
+		getDBUsernameRequest ().setBounds ( leftSpaceToComponents,
+				topSpaceToComponents + getHeightOfErrorSpace () + ( 2 * heightOfComponents ), widthOfComponents,
+				heightOfComponents );
+		getDBUsername ().setBounds ( leftSpaceToComponents,
+				topSpaceToComponents + getHeightOfErrorSpace () + ( 3 * heightOfComponents ), widthOfComponents,
+				heightOfComponents );
+		getDBPasswordRequest ().setBounds ( leftSpaceToComponents,
+				topSpaceToComponents + getHeightOfErrorSpace () + ( 4 * heightOfComponents ), widthOfComponents,
+				heightOfComponents );
+		getDBPassword ().setBounds ( leftSpaceToComponents,
+				topSpaceToComponents + getHeightOfErrorSpace () + ( 5 * heightOfComponents ), widthOfComponents,
+				heightOfComponents );
+
+		getBTNApply ()
+				.setBounds (
+						leftSpaceToApplyButton, topSpaceToComponents + getHeightOfErrorSpace ()
+								+ ( 6 * heightOfComponents ) + topSpaceToApplyButtonFromComponents,
+						widthOfApplyButton, heightOfApplyButton );
 	}
 
 	private void addBTNApplyListener()
@@ -98,15 +131,93 @@ public class SpaceDialog extends JDialog
 				{
 					String dbAdress = getDBAdress ().getText ();
 					String dbUsername = getDBUsername ().getText ();
-					
-					String dbPassword = null;
+					StringBuilder dbPasswordBuilder = new StringBuilder ( "" );
+
+					for ( char i : getDBPassword ().getPassword () )
+					{
+						dbPasswordBuilder.append ( i );
+					}
+
+					String dbPassword = dbPasswordBuilder.toString ();
+
+					setShowDBAdressError ( dbAdress == null || dbAdress.equals ( "" ) );
+					setShowDBUsernameError ( dbUsername == null || dbUsername.equals ( "" ) );
+
+					validateErrors ();
+
+					if ( isShowDBAdressError () || isShowDBUsernameError () )
+					{
+						return;
+					}
+
+					String[] errors = spaceView.connect ( dbAdress, dbUsername, dbPassword );
+
+					if ( errors != null )
+					{
+						for ( String i : errors )
+						{
+							if ( i != null && !i.equals ( "" ) )
+							{
+								System.err.println ( i );
+							}
+						}
+					}
+					else
+					{
+						setVisible ( false );
+
+						SpaceView.initiateGui ();
+						SpaceView.addMainMenu ();
+						EventManager.registerListener ( new SoundListener () );
+					}
 				}
 			}
 		};
 
 		btnApply.addActionListener ( listener );
 	}
-	
+
+	public void validateErrors()
+	{
+		String errorOutput = "<html>";
+		setHeightOfErrorSpace ( 0 );
+
+		if ( isShowDBAdressError () )
+		{
+			setHeightOfErrorSpace ( getHeightOfErrorSpace () + getHeightOfComponents () );
+
+			if ( errorOutput.equals ( "<html>" ) )
+			{
+				errorOutput += "Die Datenbank muss eine Adresse haben!";
+			}
+			else
+			{
+				errorOutput += "<br/>" + "Die Datenbank muss eine Adresse haben!";
+			}
+		}
+
+		if ( isShowDBUsernameError () )
+		{
+			setHeightOfErrorSpace ( getHeightOfErrorSpace () + getHeightOfComponents () );
+
+			if ( errorOutput.equals ( "<html>" ) )
+			{
+				errorOutput += "Um bei der Datenbank einzuloggen, benötigt man einen Benutzernamen!";
+			}
+			else
+			{
+				errorOutput += "<br/>" + "Um bei der Datenbank einzuloggen, benötigt man einen Benutzernamen!";
+			}
+		}
+
+		getDBError ().setText ( errorOutput );
+		setAllBoundsAndSizes ();
+		validate ();
+		repaint ();
+
+		errorOutput += "</html>";
+	}
+
 	public SpaceView getSpaceView()
 	{
 		return spaceView;
@@ -116,7 +227,7 @@ public class SpaceDialog extends JDialog
 	{
 		this.spaceView = spaceView;
 	}
-	
+
 	public JPanel getPanel()
 	{
 		return panel;
@@ -295,5 +406,45 @@ public class SpaceDialog extends JDialog
 	public void setRightSpaceToDialogBorderFromComponents(int rightSpaceToDialogBorderFromComponents)
 	{
 		this.rightSpaceToDialogBorderFromComponents = rightSpaceToDialogBorderFromComponents;
+	}
+
+	public boolean isShowDBAdressError()
+	{
+		return showDBAdressError;
+	}
+
+	public void setShowDBAdressError(boolean showDBAdressError)
+	{
+		this.showDBAdressError = showDBAdressError;
+	}
+
+	public boolean isShowDBUsernameError()
+	{
+		return showDBUsernameError;
+	}
+
+	public void setShowDBUsernameError(boolean showDBUsernameError)
+	{
+		this.showDBUsernameError = showDBUsernameError;
+	}
+
+	public JLabel getDBError()
+	{
+		return dbError;
+	}
+
+	public void setDBError(JLabel dbError)
+	{
+		this.dbError = dbError;
+	}
+
+	public int getHeightOfErrorSpace()
+	{
+		return heightOfErrorSpace;
+	}
+
+	public void setHeightOfErrorSpace(int heightOfErrorSpace)
+	{
+		this.heightOfErrorSpace = heightOfErrorSpace;
 	}
 }

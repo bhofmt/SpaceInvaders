@@ -21,13 +21,13 @@ public class DatabaseManager
 		{
 			if ( con == null || con.isClosed () )
 			{
-				Class.forName ( JDBC_DRIVER );
+//				Class.forName ( JDBC_DRIVER );
 				String DB_URL = "jdbc:mysql://" + adress;
 				con = DriverManager.getConnection ( DB_URL, databaseUsername, databasePassword );
 			}
 			return new ConnectionPacket ( con, null );
 		}
-		catch ( ClassNotFoundException | SQLException e )
+		catch ( SQLException e )
 		{
 			return new ConnectionPacket ( null, new String[]
 			{ e.getMessage () } );
