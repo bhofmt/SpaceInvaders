@@ -8,7 +8,7 @@ public class Projectile extends Entity
 	
 	private static final int DEFAULTHEIGHT = 8;
 	private static final int DEFAULTWIDTH = 4;
-	private static final int DEFAULTSPEED = 10;
+	private static final int DEFAULTSPEED = 12;
 	private static final int DEFAULTSTARTINGHEALTH = 1;
 	
 	public Projectile ( )
@@ -18,12 +18,17 @@ public class Projectile extends Entity
 	
 	public Projectile ( int x, int y )
 	{
+		this ( x, y, DEFAULTSTARTINGHEALTH );
+	}
+	
+	public Projectile ( int x, int y, int healthPoints )
+	{
 		super ( x, y );
 		height = DEFAULTHEIGHT;
 		width = DEFAULTWIDTH;
 		setSpeed ( DEFAULTSPEED );
 		setImage ( SpaceController.getInstanceOf ( ).readImage ( "images/projectile.png" ));
-		setHealthPoints ( DEFAULTSTARTINGHEALTH );
+		setHealthPoints ( healthPoints );
 	}
 	
 	@Override
