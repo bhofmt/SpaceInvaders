@@ -1,5 +1,7 @@
 package project.model;
 
+import project.controller.SpaceController;
+
 public class Projectile extends Entity
 {
 	private static final long serialVersionUID = -7311127654177673361L;
@@ -7,6 +9,7 @@ public class Projectile extends Entity
 	private static final int DEFAULTHEIGHT = 8;
 	private static final int DEFAULTWIDTH = 4;
 	private static final int DEFAULTSPEED = 10;
+	private static final int DEFAULTSTARTINGHEALTH = 1;
 	
 	public Projectile ( )
 	{
@@ -19,6 +22,8 @@ public class Projectile extends Entity
 		height = DEFAULTHEIGHT;
 		width = DEFAULTWIDTH;
 		setSpeed ( DEFAULTSPEED );
+		setImage ( SpaceController.getInstanceOf ( ).readImage ( "images/projectile.png" ));
+		setHealthPoints ( DEFAULTSTARTINGHEALTH );
 	}
 	
 	@Override

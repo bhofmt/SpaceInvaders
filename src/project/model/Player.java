@@ -4,16 +4,19 @@ import project.controller.SpaceController;
 
 public class Player extends Entity
 {
+
 	private static final long serialVersionUID = -3223492405755701782L;
 	
-	private static final int DEFAULTHEIGHT = 10;
-	private static final int DEFAULTWIDTH = 10;
+	private static final int DEFAULTHEIGHT = 40;
+	private static final int DEFAULTWIDTH = 40;
 	private static final int DEFAULTSPEED = 4;
 	private static final int DEFAULTMAXPROJECTILES = 1;
+	private static final int DEFAULTSTARTINGHEALTH = 3;
 	
 	private int maxProjectiles;
 	private String playerName;
 	private boolean moveLeft = false, moveRight = false;
+	private int points;
 	
 	public Player ( )
 	{
@@ -33,7 +36,8 @@ public class Player extends Entity
 		width = DEFAULTWIDTH;
 		maxProjectiles = DEFAULTMAXPROJECTILES;
 		setSpeed ( DEFAULTSPEED );
-		
+		setImage ( SpaceController.getInstanceOf ( ).readImage ( "images/ship.png" ));
+		setHealthPoints ( DEFAULTSTARTINGHEALTH );
 	}
 	
 	@Override
@@ -118,6 +122,16 @@ public class Player extends Entity
 	public void setMaxProjectiles ( int maxProjectiles )
 	{
 		this.maxProjectiles = maxProjectiles;
+	}
+
+	public int getPoints ( )
+	{
+		return points;
+	}
+
+	public void setPoints ( int points )
+	{
+		this.points = points;
 	}
 	
 }

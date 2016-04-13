@@ -126,8 +126,6 @@ public class SpaceView extends JFrame
 	private static void addGameEnvironment ( )
 	{
 		
-		controller = SpaceController.getInstanceOf ( );
-		
 		JPanel borderPanel = new JPanel ( new BorderLayout ( ) );
 		JPanel userInterface = new JPanel ( );
 		Dimension expectedDimension = new Dimension ( gui.getWidth ( ) - 100, gui.getHeight ( ) - 100 );
@@ -162,16 +160,21 @@ public class SpaceView extends JFrame
 		borderPanel.add ( userInterface, BorderLayout.NORTH );
 		
 		gui.add ( box, BorderLayout.CENTER );
+		
+		gui.validate ( );
+		gui.repaint ( );
+
+		controller = SpaceController.getInstanceOf ( );
+		
+		controller.setPlayer ( new Player ( 0, SpaceController.getGamePanel ( ).getHeight ( ) - 50 ) );
+
+		addKeyListener ( );
 
 		Time timemaker = new Time ( );
 		controller.setTimer ( timemaker );
 		
 		timemaker.addListener ( controller );
 		timemaker.start ( );
-		
-		controller.setPlayer ( new Player ( 0, SpaceController.getGamePanel ( ).getHeight ( ) - 50 ) );
-
-		addKeyListener ( );
 	}
 	
 	private static void initiateGui ( )

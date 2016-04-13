@@ -1,10 +1,18 @@
 package project.controller;
 
 import java.awt.Dimension;
+import java.awt.Image;
+import java.awt.image.BufferedImage;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.Random;
+
+import javax.imageio.ImageIO;
 
 import project.listeners.TimeListener;
 import project.model.Enemy;
+import project.model.Entity;
 import project.model.Player;
 import project.model.Projectile;
 import project.thread.Time;
@@ -26,7 +34,7 @@ public class SpaceController implements TimeListener
 	
 	private SpaceController ( )
 	{
-		
+	
 	}
 	
 	public static SpaceController getInstanceOf ( )
@@ -159,6 +167,7 @@ public class SpaceController implements TimeListener
 	public void timeTick ( )
 	{
 		moveActions ( );
+		hitDetectionActions ( );
 		checkActions ( );
 		updateActions ( );
 		levelActions ( );
@@ -169,6 +178,7 @@ public class SpaceController implements TimeListener
 	 */
 	public void spawnNextEnemy ( )
 	{
+		Random random = new Random ( );
 		incomingEnemies--;
 		if ( incomingEnemies <= 0 )
 		{
@@ -177,11 +187,40 @@ public class SpaceController implements TimeListener
 		}
 		else
 		{
-			timeUntilNextSpawn = 80;
+			timeUntilNextSpawn = random.nextInt ( 60 ) + 60;
 		}
-		Enemy enemy = new Enemy ( 0, 0, 3 );
+		Enemy enemy = new Enemy ( 0, 0, random.nextInt ( 2 ) + 3 );
 		enemy.setSize ( new Dimension ( 25, 20 ) );
 		addEnemy ( enemy );
+	}
+	
+	public void hitDetectionActions ( )
+	{
+		ArrayList<Projectile> cloneProjectiles = controller.cloneArrayList ( projectiles );
+		ArrayList<Enemy> cloneEnemies = controller.cloneArrayList ( enemies );
+		
+		for ( Projectile projectile : cloneProjectiles )
+		{
+			for ( Enemy enemy : cloneEnemies )
+			{
+				if ( attackerHitsTarget ( projectile, enemy ) )
+				{
+					enemy.getHit ( projectile );
+					projectile.getHit ( enemy );
+					
+					cleanDead ( enemy, enemies );
+					cleanDead ( projectile, projectiles );
+				}
+			}
+		}
+	}
+	
+	public <T> void cleanDead ( Entity target, ArrayList<T> targetList )
+	{
+		if ( !target.isAlive ( ) )
+		{
+			targetList.remove ( target );
+		}
 	}
 	
 	/**
@@ -233,10 +272,32 @@ public class SpaceController implements TimeListener
 	/**
 	 * Is performed when an enemy manages to get completely through.
 	 */
-	public void enemyPassed ( )
+	public void enemyPassed ( Entity enemy )
+	{
+		enemies.remove ( enemy );
+		player.setHealthPoints ( player.getHealthPoints ( ) - 1 );
+		if ( !player.isAlive ( ) )
+		{
+			gameOver ( );
+		}
+	}
+	
+	public void gameOver ( )
 	{
 		timer.requestPause ( );
 		getGamePanel ( ).setGameOverText ( "Game Over" );
+	}
+	
+	/**
+	 * Returns true if the attacker hits ( / intersects with) the target.
+	 */
+	public boolean attackerHitsTarget ( Entity attacker, Entity target )
+	{
+		if ( attacker.intersects ( target ) )
+		{
+			return true;
+		}
+		return false;
 	}
 	
 	public void addEnemy ( Enemy enemy )
@@ -312,5 +373,30 @@ public class SpaceController implements TimeListener
 	public int getLevel ( )
 	{
 		return level;
+	}
+	
+	public Image readImage ( String path )
+	{
+		InputStream stream;
+		BufferedImage image = null;
+		
+		stream = getClass ( ).getClassLoader ( ).getResourceAsStream ( path );
+		
+		try
+		{
+			image = ImageIO.read ( stream );
+		}
+		catch ( IOException e )
+		{
+			System.err.println ( "Couldn't load the Texture! Cause: " + e.getMessage ( ) );
+			System.exit ( 67 );
+		}
+		catch ( IllegalArgumentException e )
+		{
+			System.err.println ( "Couldn't read the Texture! Cause: " + e.getMessage ( ) );
+			System.exit ( 68 );
+		}
+		
+		return image;
 	}
 }
