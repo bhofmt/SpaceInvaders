@@ -126,6 +126,7 @@ public class SpaceView extends JFrame
 
 	private static void addMainMenu()
 	{
+		gui.getContentPane ().removeAll ();
 		ActionListener startGameLSTN = new ActionListener ()
 		{
 
@@ -133,8 +134,8 @@ public class SpaceView extends JFrame
 			public void actionPerformed(ActionEvent e)
 			{
 				if ( e.getActionCommand ().equals ( "Spiel Starten" ) )
-				{
-
+				{	
+					addGameEnvironment ();
 				}
 				else if ( e.getActionCommand ().equals ( "Spiel Beenden" ) )
 				{
@@ -146,8 +147,6 @@ public class SpaceView extends JFrame
 		JPanel mainMenu = new MainMenu ( null );
 		SpaceButton startGameBTN = new SpaceButton ( "Spiel Starten" );
 		SpaceButton exitGameBTN = new SpaceButton ( "Spiel Beenden" );
-
-		// JButton startGame = new JButton ( "Spiel Starten" );
 
 		startGameBTN.setBounds ( (int) ( ( gui.getWidth () / 2 ) - ( STARTBTNWIDTH / 2 ) ),
 				(int) ( ( gui.getHeight () / 2 ) - ( STARTBTNHEIGHT / 2 ) ), STARTBTNWIDTH, STARTBTNHEIGHT );
@@ -184,7 +183,7 @@ public class SpaceView extends JFrame
 
 	private static void addGameEnvironment()
 	{
-		
+		gui.getContentPane ().removeAll ();
 		JPanel borderPanel = new JPanel ( new BorderLayout ( ) );
 		JPanel userInterface = new JPanel ( );
 		Dimension expectedDimension = new Dimension ( gui.getWidth ( ) - 100, gui.getHeight ( ) - 100 );
@@ -221,6 +220,8 @@ public class SpaceView extends JFrame
 		
 		gui.validate ( );
 		gui.repaint ( );
+		
+		gamePanel.requestFocusInWindow ();
 
 		controller = SpaceController.getInstanceOf ( );
 		
@@ -240,7 +241,6 @@ public class SpaceView extends JFrame
 		gui = getInstanceOf ();
 
 		gui.setLayout ( new BorderLayout () );
-		// gui.setSize ( 1200, 800 );
 		gui.setTitle ( "Space Invaders" );
 		gui.setExtendedState ( Frame.MAXIMIZED_BOTH );
 		gui.setUndecorated ( true );
