@@ -2,24 +2,25 @@ package project.view;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
-import java.awt.Component;
 import java.awt.Dimension;
-import java.awt.Graphics;
+import java.awt.Frame;
 import java.awt.GraphicsEnvironment;
-import java.awt.Insets;
+import java.awt.Image;
 import java.awt.Point;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.awt.image.BufferedImage;
+import java.io.IOException;
+import java.io.InputStream;
 
+import javax.imageio.ImageIO;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
-import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
-import javax.swing.border.Border;
-
-import javafx.scene.control.ComboBox;
 import project.controller.SpaceController;
 import project.model.Player;
 import project.thread.Time;
@@ -30,6 +31,9 @@ public class SpaceView extends JFrame
 
 	private static final JLabel levelStatus = new JLabel ();
 	private static final JLabel cannonStatus = new JLabel ();
+
+	private static final int STARTBTNHEIGHT = 30;
+	private static final int STARTBTNWIDTH = 150;
 
 	private static SpaceView gui = null;
 	private static SpaceController controller = null;
@@ -122,20 +126,57 @@ public class SpaceView extends JFrame
 
 	private static void addMainMenu()
 	{
-		// JPanel
-		JPanel pnlButton = new JPanel ();
-		// Buttons
-		JButton btnPeschä = new JButton ( "Peschä" );
+		ActionListener startGameLSTN = new ActionListener ()
+		{
 
-		// FlightInfo setbounds
-		btnPeschä.setBounds ( 60, 400, 220, 30 );
+			@Override
+			public void actionPerformed(ActionEvent e)
+			{
+				if ( e.getActionCommand ().equals ( "Spiel Starten" ) )
+				{
 
-		// JPanel bounds
-		pnlButton.setBounds ( 800, 800, 200, 100 );
+				}
+				else if ( e.getActionCommand ().equals ( "Spiel Beenden" ) )
+				{
+					System.exit ( 0 );
+				}
+			}
+		};
 
-		// Adding to JFrame
-		pnlButton.add ( btnPeschä );
-		gui.add ( pnlButton );
+		JPanel mainMenu = new MainMenu ( null );
+		SpaceButton startGameBTN = new SpaceButton ( "Spiel Starten" );
+		SpaceButton exitGameBTN = new SpaceButton ( "Spiel Beenden" );
+
+		// JButton startGame = new JButton ( "Spiel Starten" );
+
+		startGameBTN.setBounds ( (int) ( ( gui.getWidth () / 2 ) - ( STARTBTNWIDTH / 2 ) ),
+				(int) ( ( gui.getHeight () / 2 ) - ( STARTBTNHEIGHT / 2 ) ), STARTBTNWIDTH, STARTBTNHEIGHT );
+		
+		exitGameBTN.setBounds ( (int) ( ( gui.getWidth () / 2 ) - ( STARTBTNWIDTH / 2 ) ),
+				(int) ( ( gui.getHeight () / 2 ) - ( STARTBTNHEIGHT / 2 ) + 250 ), STARTBTNWIDTH, STARTBTNHEIGHT );
+		
+		
+		mainMenu.setBounds ( 0, 0, gui.getWidth (), gui.getHeight () );
+
+		startGameBTN.setForeground ( Color.WHITE );
+		startGameBTN.setBackground ( Color.BLACK );
+		startGameBTN.setPressedBackground ( Color.decode ( "#750000" ) );
+		startGameBTN.setHoverBackground ( Color.decode ( "#2B0000" ) );
+		startGameBTN.setBorderPainted ( false );
+		
+		exitGameBTN.setForeground ( Color.WHITE );
+		exitGameBTN.setBackground ( Color.BLACK );
+		exitGameBTN.setPressedBackground ( Color.decode ( "#750000" ) );
+		exitGameBTN.setHoverBackground ( Color.decode ( "#2B0000" ) );
+		exitGameBTN.setBorderPainted ( false );
+
+		startGameBTN.addActionListener ( startGameLSTN );
+		exitGameBTN.addActionListener ( startGameLSTN );
+
+		mainMenu.add ( startGameBTN );
+		mainMenu.add ( exitGameBTN );
+
+		gui.add ( mainMenu );
 
 		gui.validate ();
 		gui.repaint ();
@@ -199,8 +240,10 @@ public class SpaceView extends JFrame
 		gui = getInstanceOf ();
 
 		gui.setLayout ( new BorderLayout () );
-		gui.setSize ( 1200, 800 );
+		// gui.setSize ( 1200, 800 );
 		gui.setTitle ( "Space Invaders" );
+		gui.setExtendedState ( Frame.MAXIMIZED_BOTH );
+		gui.setUndecorated ( true );
 		gui.setDefaultCloseOperation ( EXIT_ON_CLOSE );
 		gui.setAutoRequestFocus ( false );
 		gui.setResizable ( false );
