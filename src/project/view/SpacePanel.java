@@ -63,8 +63,7 @@ public class SpacePanel extends JPanel
 		// Draw all entities.
 		for ( Entity entity : entities )
 		{
-			g2d.drawImage (	entity.getImage ( ), ( int ) entity.getX ( ), ( int ) entity.getY ( ), ( int ) ( entity.getWidth ( ) ),
-							( int ) ( entity.getHeight ( ) ), null );
+			entity.paintEntity ( g2d );
 		}
 		
 		g2d.setColor ( Color.WHITE );

@@ -10,8 +10,8 @@ public class Enemy extends Entity
 {
 	private static final long serialVersionUID = 5919647216294900080L;
 	
-	private static final int DEFAULTHEIGHT = 8;
-	private static final int DEFAULTWIDTH = 8;
+	private static final int DEFAULTHEIGHT = 20;
+	private static final int DEFAULTWIDTH = 25;
 	private static final int ROWHEIGHT = 40;
 	private static final int MAXROWS = 5;
 	private static final int DEFAULTSTARTINGHEALTH = 1;
@@ -32,12 +32,17 @@ public class Enemy extends Entity
 	
 	public Enemy ( int x, int y, int speed, int healthPoints )
 	{
+		this ( x, y, speed, healthPoints, Enemy.getRandomEnemyImage ( ), DEFAULTWIDTH, DEFAULTHEIGHT );
+	}
+	
+	public Enemy ( int x, int y, int speed, int healthPoints, Image image, int width, int height )
+	{
 		super ( x, y );
-		height = DEFAULTHEIGHT;
-		width = DEFAULTWIDTH;
+		this.height = height;
+		this.width = width;
 		setSpeed ( speed );
 		movement = getSpeed ( );
-		setImage ( Enemy.getRandomEnemyImage ( ) );
+		setImage ( image );
 		setHealthPoints ( healthPoints );
 	}
 	

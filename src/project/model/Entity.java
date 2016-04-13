@@ -1,5 +1,6 @@
 package project.model;
 
+import java.awt.Graphics;
 import java.awt.Image;
 import java.awt.Rectangle;
 import java.util.ArrayList;
@@ -75,5 +76,10 @@ public abstract class Entity extends Rectangle
 	public void setHealthPoints ( int healthPoints )
 	{
 		this.healthPoints = healthPoints;
+	}
+	
+	public void paintEntity ( Graphics g )
+	{
+		g.drawImage ( image, x, y, width, height, null );
 	}
 }

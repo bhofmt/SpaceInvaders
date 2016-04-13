@@ -1,6 +1,5 @@
 package project.controller;
 
-import java.awt.Dimension;
 import java.awt.Image;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
@@ -15,6 +14,7 @@ import project.model.Enemy;
 import project.model.Entity;
 import project.model.Player;
 import project.model.Projectile;
+import project.model.Spaceship;
 import project.thread.Time;
 import project.view.SpacePanel;
 import project.view.SpaceView;
@@ -189,8 +189,17 @@ public class SpaceController implements TimeListener
 		{
 			timeUntilNextSpawn = random.nextInt ( 60 ) + 60;
 		}
-		Enemy enemy = new Enemy ( 0, 0, random.nextInt ( 2 ) + 3 );
-		enemy.setSize ( new Dimension ( 25, 20 ) );
+		
+		Enemy enemy;
+		
+		if ( level % 5 == 0 )
+		{
+			enemy = new Spaceship ( 0, 30, random.nextInt ( 2 ) + 5 );
+		}
+		else
+		{
+			enemy = new Enemy ( 0, 20, random.nextInt ( 2 ) + 3 );
+		}
 		addEnemy ( enemy );
 	}
 	
