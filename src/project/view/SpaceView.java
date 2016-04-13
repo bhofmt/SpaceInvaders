@@ -2,25 +2,25 @@ package project.view;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.Dialog;
 import java.awt.Dimension;
 import java.awt.Frame;
 import java.awt.GraphicsEnvironment;
-import java.awt.Image;
 import java.awt.Point;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
-import java.awt.image.BufferedImage;
-import java.io.IOException;
-import java.io.InputStream;
-
-import javax.imageio.ImageIO;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
+import javax.swing.JButton;
+import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JPasswordField;
+import javax.swing.JTextField;
+
 import project.controller.SpaceController;
 import project.model.Player;
 import project.thread.Time;
@@ -134,7 +134,7 @@ public class SpaceView extends JFrame
 			public void actionPerformed(ActionEvent e)
 			{
 				if ( e.getActionCommand ().equals ( "Spiel Starten" ) )
-				{	
+				{
 					addGameEnvironment ();
 				}
 				else if ( e.getActionCommand ().equals ( "Spiel Beenden" ) )
@@ -150,11 +150,10 @@ public class SpaceView extends JFrame
 
 		startGameBTN.setBounds ( (int) ( ( gui.getWidth () / 2 ) - ( STARTBTNWIDTH / 2 ) ),
 				(int) ( ( gui.getHeight () / 2 ) - ( STARTBTNHEIGHT / 2 ) ), STARTBTNWIDTH, STARTBTNHEIGHT );
-		
+
 		exitGameBTN.setBounds ( (int) ( ( gui.getWidth () / 2 ) - ( STARTBTNWIDTH / 2 ) ),
 				(int) ( ( gui.getHeight () / 2 ) - ( STARTBTNHEIGHT / 2 ) + 250 ), STARTBTNWIDTH, STARTBTNHEIGHT );
-		
-		
+
 		mainMenu.setBounds ( 0, 0, gui.getWidth (), gui.getHeight () );
 
 		startGameBTN.setForeground ( Color.WHITE );
@@ -162,7 +161,7 @@ public class SpaceView extends JFrame
 		startGameBTN.setPressedBackground ( Color.decode ( "#750000" ) );
 		startGameBTN.setHoverBackground ( Color.decode ( "#2B0000" ) );
 		startGameBTN.setBorderPainted ( false );
-		
+
 		exitGameBTN.setForeground ( Color.WHITE );
 		exitGameBTN.setBackground ( Color.BLACK );
 		exitGameBTN.setPressedBackground ( Color.decode ( "#750000" ) );
@@ -184,10 +183,10 @@ public class SpaceView extends JFrame
 	private static void addGameEnvironment()
 	{
 		gui.getContentPane ().removeAll ();
-		JPanel borderPanel = new JPanel ( new BorderLayout ( ) );
-		JPanel userInterface = new JPanel ( );
-		Dimension expectedDimension = new Dimension ( gui.getWidth ( ) - 100, gui.getHeight ( ) - 100 );
-		gamePanel = new SpacePanel ( );
+		JPanel borderPanel = new JPanel ( new BorderLayout () );
+		JPanel userInterface = new JPanel ();
+		Dimension expectedDimension = new Dimension ( gui.getWidth () - 100, gui.getHeight () - 100 );
+		gamePanel = new SpacePanel ();
 		borderPanel.setPreferredSize ( expectedDimension );
 		borderPanel.setMaximumSize ( expectedDimension );
 		borderPanel.setMinimumSize ( expectedDimension );
@@ -217,23 +216,28 @@ public class SpaceView extends JFrame
 		borderPanel.add ( userInterface, BorderLayout.NORTH );
 
 		gui.add ( box, BorderLayout.CENTER );
-		
-		gui.validate ( );
-		gui.repaint ( );
-		
+
+		gui.validate ();
+		gui.repaint ();
+
 		gamePanel.requestFocusInWindow ();
 
-		controller = SpaceController.getInstanceOf ( );
-		
-		controller.setPlayer ( new Player ( 0, SpaceController.getGamePanel ( ).getHeight ( ) - 50 ) );
+		controller = SpaceController.getInstanceOf ();
 
-		addKeyListener ( );
+		controller.setPlayer ( new Player ( 0, SpaceController.getGamePanel ().getHeight () - 50 ) );
+
+		addKeyListener ();
 
 		Time timemaker = new Time ();
 		controller.setTimer ( timemaker );
 
 		timemaker.addListener ( controller );
-		timemaker.start ( );
+		timemaker.start ();
+	}
+
+	private static void createConnection()
+	{
+		SpaceDialog dialog = new SpaceDialog ( SpaceView.getInstanceOf () );
 	}
 
 	private static void initiateGui()
@@ -266,8 +270,9 @@ public class SpaceView extends JFrame
 
 	public static void main(String[] args)
 	{
-		initiateGui ();
-		addMainMenu ();
+		initiateGui ( );
+		addMainMenu ( );
+		EventManager.registerListener ( new SoundListener ( ) );
 	}
 
 	public static SpacePanel getGamePanel()
