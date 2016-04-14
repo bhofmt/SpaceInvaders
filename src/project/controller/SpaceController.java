@@ -206,10 +206,10 @@ public class SpaceController implements TimeListener
 		}
 		else
 		{
-			int dice = random.nextInt ( 100 );
-			if ( dice < 30 )
+			int dice = random.nextInt ( 10 );
+			if ( dice < 2 )
 			{
-				enemy = new Spaceship ( 0, 30, random.nextInt ( 3 ) + 3, 3 + ( level / 5 ) );
+				enemy = new Spaceship ( 0, 30, random.nextInt ( 2 ) + 3, 3 + ( level / 5 ) );
 			}
 			else
 			{

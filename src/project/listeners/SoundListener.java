@@ -1,5 +1,7 @@
 package project.listeners;
 
+import net.keecode.asset.AssetFactory;
+import net.keecode.asset.Audio;
 import net.keecode.event.EventHandler;
 import net.keecode.event.SoundStopEvent;
 import net.keecode.listener.Listener;
@@ -13,7 +15,7 @@ public class SoundListener implements Listener
 	{
 		if ( event.getAudio ( ).getAssetName ( ) == "music.wav" )
 		{
-			SoundManager.playSound ( event.getAudio ( ) );
+			SoundManager.playSound (  ( Audio ) AssetFactory.loadAudio ( "music.wav" ) );
 		}
 	}
 	
