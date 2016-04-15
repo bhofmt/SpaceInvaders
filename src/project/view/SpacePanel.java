@@ -23,10 +23,13 @@ public class SpacePanel extends JPanel
 	private String gameOverText = "";
 	private String waveTimerText = "";
 	private String healthText = "";
-	private Image heart = controller.getInstanceOf ( ).readImage ( "images/heart.png" );
+	private String maxShotsText = "";
+	private String scoreText = "";
+	private Image heart = SpaceController.getInstanceOf ( ).readImage ( "images/heart.png" );
 	
 	public SpacePanel ( )
 	{
+		SpaceController.destroyController ( );
 		controller = SpaceController.getInstanceOf ( );
 		setFocusable ( true );
 		requestFocusInWindow ( true );
@@ -132,6 +135,36 @@ public class SpacePanel extends JPanel
 		
 		// draw String
 		g2d.drawString ( healthText, xCoordinate, yCoordinate );
+		
+		/** Putting a maxShots counter in the upper right corner */
+		// Change the fontSize.
+		g2d.setFont ( g.getFont ( ).deriveFont ( 15F ) );
+		// get the FontMetrics for the current font
+		fm = g2d.getFontMetrics ( );
+		// find the center location to display
+		stringWidth = fm.stringWidth ( maxShotsText );
+		stringAccent = fm.getAscent ( );
+		// get the position of the leftmost character in the baseline
+		xCoordinate = -20 - stringWidth + getWidth ( );
+		yCoordinate = 20;
+		
+		// draw String
+		g2d.drawString ( maxShotsText, xCoordinate, yCoordinate );
+		
+		/** Putting a maxShots counter in the upper right corner */
+		// Change the fontSize.
+		g2d.setFont ( g.getFont ( ).deriveFont ( 15F ) );
+		// get the FontMetrics for the current font
+		fm = g2d.getFontMetrics ( );
+		// find the center location to display
+		stringWidth = fm.stringWidth ( scoreText );
+		stringAccent = fm.getAscent ( );
+		// get the position of the leftmost character in the baseline
+		xCoordinate = 20;
+		yCoordinate = 20;
+		
+		// draw String
+		g2d.drawString ( scoreText, xCoordinate, yCoordinate );
 	}
 	
 	public void setGameOverText ( String s )
@@ -147,5 +180,15 @@ public class SpacePanel extends JPanel
 	public void setHealthText ( String s )
 	{
 		this.healthText = s;
+	}
+
+	public void setMaxShotsText ( String maxShotsText )
+	{
+		this.maxShotsText = maxShotsText;
+	}
+
+	public void setScoreText ( String scoreText )
+	{
+		this.scoreText = scoreText;
 	}
 }

@@ -11,6 +11,8 @@ public class Projectile extends Entity
 	private static final int DEFAULTSPEED = 12;
 	private static final int DEFAULTSTARTINGHEALTH = 1;
 	
+	private int maxHealth;
+	
 	public Projectile ( )
 	{
 		this ( 0, 0 );
@@ -29,6 +31,7 @@ public class Projectile extends Entity
 		setSpeed ( DEFAULTSPEED );
 		setImage ( SpaceController.getInstanceOf ( ).readImage ( "images/projectile.png" ));
 		setHealthPoints ( healthPoints );
+		maxHealth = healthPoints;
 	}
 	
 	@Override
@@ -40,6 +43,16 @@ public class Projectile extends Entity
 			newYCoord = 0 - (int)getHeight ( );
 		}
 		y = newYCoord;
+	}
+
+	public int getMaxHealth ( )
+	{
+		return maxHealth;
+	}
+
+	public void setMaxHealth ( int maxHealth )
+	{
+		this.maxHealth = maxHealth;
 	}
 	
 }

@@ -83,4 +83,9 @@ public abstract class Entity extends Rectangle
 	{
 		g.drawImage ( image, x, y, width, height, null );
 	}
+
+	public ArrayList<Entity> getTargetList ( )
+	{
+		return targetList;
+	}
 }

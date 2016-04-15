@@ -18,6 +18,7 @@ public class Player extends Entity
 	private boolean moveLeft = false, moveRight = false;
 	private int points;
 	private int projectileHealth;
+	private int bossesKilled = 0;
 	
 	public Player ( )
 	{
@@ -101,6 +102,23 @@ public class Player extends Entity
 		return false;
 	}
 	
+	public int getSidePoints ( )
+	{
+		// TODO calculate side points
+		int score = 0;
+		return score;
+	}
+	
+	public void killedBoss ( )
+	{
+		bossesKilled++;
+	}
+	
+	public void addScore ( int score )
+	{
+		points += score;
+	}
+	
 	public String getPlayerName ( )
 	{
 		return playerName;
@@ -144,6 +162,11 @@ public class Player extends Entity
 	public void setProjectileHealth ( int projectileHealth )
 	{
 		this.projectileHealth = projectileHealth;
+	}
+
+	public int getBossesKilled ( )
+	{
+		return bossesKilled;
 	}
 	
 }

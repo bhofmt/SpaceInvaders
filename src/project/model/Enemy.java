@@ -44,6 +44,7 @@ public class Enemy extends Entity
 		movement = getSpeed ( );
 		setImage ( image );
 		setHealthPoints ( healthPoints );
+		points = ( healthPoints * 20 ) + ( (speed - 3 ) * 5 );
 	}
 	
 	@Override
@@ -84,12 +85,12 @@ public class Enemy extends Entity
 		
 		return possibleImages.get ( 0 );
 	}
-
+	
 	public int getPoints ( )
 	{
 		return points;
 	}
-
+	
 	public void setPoints ( int points )
 	{
 		this.points = points;

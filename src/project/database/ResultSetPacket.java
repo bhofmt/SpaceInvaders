@@ -4,46 +4,46 @@ import java.sql.ResultSet;
 
 public class ResultSetPacket
 {
-	private ResultSet resultSet;
-	private String[] errors;
-
-	public ResultSetPacket ()
+	private ResultSet resultSet = null;
+	private String[] errors = null;
+	
+	public ResultSetPacket ( )
 	{
-
+	
 	}
-
+	
 	public ResultSetPacket ( ResultSet resultSet )
 	{
 		this.resultSet = resultSet;
 	}
-
+	
 	public ResultSetPacket ( String[] errors )
 	{
 		this.errors = errors;
 	}
-
+	
 	public ResultSetPacket ( ResultSet resultSet, String[] errors )
 	{
 		this.resultSet = resultSet;
 		this.errors = errors;
 	}
-
-	public ResultSet getResultSet()
+	
+	public ResultSet getResultSet ( )
 	{
 		return resultSet;
 	}
-
-	public void setResultSet(ResultSet resultSet)
+	
+	public void setResultSet ( ResultSet resultSet )
 	{
 		this.resultSet = resultSet;
 	}
-
-	public String[] getErrors()
+	
+	public String[] getErrors ( )
 	{
 		return errors;
 	}
-
-	public void setErrors(String[] errors)
+	
+	public void setErrors ( String[] errors )
 	{
 		this.errors = errors;
 	}

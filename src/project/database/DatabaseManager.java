@@ -6,23 +6,23 @@ import java.sql.SQLException;
 
 public class DatabaseManager
 {
-
-	private static final String JDBC_DRIVER = "com.mysql.jdbc.Driver";
+	
+//	private static final String JDBC_DRIVER = "com.mysql.jdbc.Driver";
 	private static Connection con;
-
-	private DatabaseManager ()
+	
+	private DatabaseManager ( )
 	{
-
+	
 	}
-
-	public static ConnectionPacket getConnection(String adress, String databaseUsername, String databasePassword)
+	
+	public static ConnectionPacket getConnection ( String adress, String databaseUsername, String databasePassword )
 	{
 		try
 		{
-			if ( con == null || con.isClosed () )
+			if ( con == null || con.isClosed ( ) )
 			{
-//				Class.forName ( JDBC_DRIVER );
-				String DB_URL = "jdbc:mysql://" + adress;
+				// Class.forName ( JDBC_DRIVER );
+				String DB_URL = "jdbc:mysql://" + adress + ":3307/bwaltmsql1?autoReconnect=true";
 				con = DriverManager.getConnection ( DB_URL, databaseUsername, databasePassword );
 			}
 			return new ConnectionPacket ( con, null );
@@ -30,7 +30,7 @@ public class DatabaseManager
 		catch ( SQLException e )
 		{
 			return new ConnectionPacket ( null, new String[]
-			{ e.getMessage () } );
+			{ e.getMessage ( ) } );
 		}
 	}
 }
